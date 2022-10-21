@@ -2,8 +2,8 @@ from .database import SessionLocal, engine
 
 # Dependency
 def get_db():
+    db = SessionLocal()
     try:
-        db = SessionLocal()
         yield db
     finally:
         db.close()

@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 from datetime import datetime
 from pydantic import BaseModel, Field
 from uuid import uuid4
@@ -14,3 +14,4 @@ class Post(BaseModel):
 
     class Config:
         orm_mode = True
+

@@ -1,0 +1,28 @@
+site de revente orienté petite annonce étudiante (confiance étudiante entre personne de la même structure)
+
+motivation speech : problème : acheter matériel ou chose de seconde main mais peur d'être décu de l'achat, problème de confiance
+			solution :  univers (endroit où on va récupérer)-si t'es étudiant (occas étudiante)
+
+
+contenu plateforme : 
+						
+			utilisateur : mettre des commentaires sur un vendeur et produit vendu	
+
+			administrateur : supprimer annonce vendeur ou alors investigue les vendeurs (ban discord, red flag)
+		
+			acheteur : accès catalogue objet, occasion, pouvoir filtrer les résultats en fonction des universités, des domaines et de la localisation (rayon ou autre échelle)
+
+			vendeur : ajouter et supprimer un produit, noter sa qualité, dater, modèle CRUD  
+
+ 
+architecture front : 
+			onglets : meilleure catégorie de produit, meilleure école de revente, voir les produits, voir les notes, qui le vend, inscription utilisateur, 
+
+			géolocalisation : utilisé une map pour repérer les écoles tout ca 
+
+
+architecture back :
+
+			postgre : FastAPI,  
+			
+			tables : produits, utilisateurs, école

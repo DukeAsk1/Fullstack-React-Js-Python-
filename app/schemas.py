@@ -10,6 +10,7 @@ class User(BaseModel):
     firstname: str
     lastname: str
     username: str
+    email: str
     password: str
     address: str
     description: Optional[str]
@@ -48,4 +49,3 @@ class Post(BaseModel):
     price: float
     created_at: Annotated[datetime, Field(default_factory=lambda: datetime.now())]
 
-    

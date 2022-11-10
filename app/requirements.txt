@@ -1,7 +1,0 @@
-starlette_exporter
-sqlalchemy
-pydantic
-psycopg2
-python-slugify
-fastapi
-pybase64

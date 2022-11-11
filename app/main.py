@@ -24,8 +24,9 @@ app = FastAPI(
 )
 
 @app.on_event("startup")
-async def startup_event():
+async def startup_event(db: Session = SessionLocal()):
     Base.metadata.create_all(bind=engine)
+    cruds.create_list_school(db)
 
 @app.get("/")
 def read_root():
@@ -51,3 +52,7 @@ async def create(school: schemas.School, db: Session = Depends(get_db)):
 @app.get("/list")
 def get_list_ids(db: Session= Depends(get_db)):
     return cruds.get_list(db)
+
+
+
+

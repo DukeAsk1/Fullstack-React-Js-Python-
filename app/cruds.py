@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from sqlalchemy.dialects.postgresql import UUID
 from datetime import datetime
 import models, schemas
 from fastapi import HTTPException
@@ -26,3 +27,14 @@ def create_school(db: Session, school: schemas.School):
 def get_list(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.School).offset(skip).limit(limit).all()
 
+def create_list_school(db: Session):
+    school1 = models.School(
+        id= "0efe2090-1c2b-400d-a957-dd1c15607e44",
+        name= "ESIEE Paris",
+        address= "Boulevard Blaise Pascal",
+        description= "Ecole d'ingénieurs")
+    db.add(school1)
+    db.commit()
+    db.refresh(school1)
+    school1 = str(school1.id)
+    

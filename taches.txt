@@ -1,1 +1,15 @@
 commit 10-11
+
+11-11 : créer des fichiers txt format json, d'écoles et université
+        créer plusieurs utilisateurs 
+
+
+
+faire les chemins logins et register
+
+login : recupère password et username
+
+recupère les informations de l'utilisateurs qui est login par rapport à la session 
+
+
+register : pareil

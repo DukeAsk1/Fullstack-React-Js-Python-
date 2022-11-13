@@ -2,8 +2,16 @@ from sqlalchemy.orm import Session
 from sqlalchemy.dialects.postgresql import UUID
 from datetime import datetime
 import models, schemas
-from fastapi import HTTPException
+from fastapi import HTTPException, status
+import uuid
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+#from jose import JWTError, jwt
+from passlib.context import CryptContext
 
+SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
+ALGORITHM = "HS256"
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 def get_school(db: Session, user_id: int):
     return db.query(models.School).filter(models.School.id == user_id).first()
@@ -24,17 +32,109 @@ def create_school(db: Session, school: schemas.School):
     db_school.id = str(db_school.id)
     return db_school
 
-def get_list(db: Session, skip: int = 0, limit: int = 100):
+def get_list_school(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.School).offset(skip).limit(limit).all()
 
 def create_list_school(db: Session):
     school1 = models.School(
-        id= "0efe2090-1c2b-400d-a957-dd1c15607e44",
+        id= str(uuid.uuid4()),
         name= "ESIEE Paris",
         address= "Boulevard Blaise Pascal",
         description= "Ecole d'ingénieurs")
     db.add(school1)
     db.commit()
     db.refresh(school1)
-    school1 = str(school1.id)
-    
+    school1.id = str(school1.id)
+
+def verify_password(plain_password, base_password):
+    return pwd_context.verify(plain_password, base_password)
+
+def authentificate_user(db: Session, username: str, pass_word: str):
+    user = get_user(db, username)
+    print(user)
+    if not user:
+        return False
+    if pass_word != user.password:
+        return False
+    return user
+
+
+
+def get_login_user(db: Session, user_name: str,user_pwd:str):
+    try:
+        username = db.query(models.User.username).filter(models.User.username == user_name).first()
+        password = db.query(models.User.password).filter(models.User.password== user_pwd).first()
+        return username,password
+    except:
+        return False
+
+    #pass
+
+# def create_user(db: Session, user: schemas.User):
+#     db_user = models.User(**user.dict())
+#     db.add(db_user)
+#     db.commit()
+#     db.refresh(db_user)
+#     db_user.id = str(db_user.id)
+#     return db_user
+
+def create_user(db: Session, user: schemas.UserCreate):
+    #fake_hashed_password = user.password + "notreallyhashed"
+    db_user = models.User(**user.dict())
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    db_user.id = str(db_user.id)
+    return db_user
+
+def get_user(db: Session,user_name: str):
+    return db.query(models.User).filter(models.User.username == user_name).first()
+
+def get_user_by_email(db: Session, email: str):
+    return db.query(models.User).filter(models.User.email == email).first()
+
+def get_list_user(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.User).offset(skip).limit(limit).all()
+
+def create_list_user(db: Session):
+    user1 = models.User(
+        id= str(uuid.uuid4()),
+        firstname = "Hoang-Duc",
+        lastname = "DUONG",
+        username = "duongh",
+        email = "hoang-duc.duong@edu.esiee.fr",
+        password = "duongh",
+        address = "12 rue Vivaldi",
+        description = "Manque la ville")
+    db.add(user1)
+    db.commit()
+    db.refresh(user1)
+    user1.id = str(user1.id)
+
+# def get_current_user(db: Session) :
+#     credentials_exception : HTTPException(
+#         status_code=status.HTTP_401_UNAUTHORIZED,
+#         detail="Could not validate credentials",
+#         headers={"WWW-Authenticate": "Bearer"})
+#     # try:
+#     #     payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+#     #     username: str = payload.get("sub")
+#     #     if username is None:
+#     #         raise credentials_exception
+#     #     token_data = TokenData(username=username)
+#     # except JWTError:
+#     #     raise credentials_exception
+#     user = await get_user(db, username=token_data.username)
+#     if user is None:
+#         raise credentials_exception
+#     return user
+
+
+
+# "username": "duongh",
+#   "firstname": "Hoang-Duc",
+#   "lastname": "DUONG",
+#   "email": "hoang-duc.duong@edu.esiee.fr",
+#   "password": "duongh",
+#   "address": "12 rue Vivaldi",
+#   "description": "16-06"

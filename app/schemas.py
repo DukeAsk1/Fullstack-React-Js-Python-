@@ -5,19 +5,51 @@ from uuid import uuid4
 from typing_extensions import Annotated
 
 
-class User(BaseModel):
-    id: Annotated[str, Field(default_factory=lambda: uuid4().hex)]
-    firstname: str
-    lastname: str
+# class User(BaseModel):
+#     id: Annotated[str, Field(default_factory=lambda: uuid4().hex)]
+#     firstname: str
+#     lastname: str
+#     username: str
+#     email: str
+#     password: str
+#     address: str
+#     description: Optional[str]
+#     created_at: Annotated[datetime, Field(default_factory=lambda: datetime.now())]
+
+#     class Config:
+#         orm_mode = True
+
+class UserBase(BaseModel):
     username: str
-    email: str
-    password: str
-    address: str
-    description: Optional[str]
-    created_at: Annotated[datetime, Field(default_factory=lambda: datetime.now())]
 
     class Config:
         orm_mode = True
+
+class UserLogin(UserBase):
+    password: str
+
+class UserCreate(UserBase):
+    id: Annotated[str, Field(default_factory=lambda: uuid4().hex)]
+    firstname: str
+    lastname: str
+    email: str
+    username : str
+    password: str
+    address: str
+    description: Optional[str]
+    #is_active : bool
+    created_at: Annotated[datetime, Field(default_factory=lambda: datetime.now())]
+
+    
+
+
+    
+
+
+
+
+
+
 
 
 class School(BaseModel):

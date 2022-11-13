@@ -1,5 +1,6 @@
 export default [
   {
+    id: 0,
     title: "PEUGEOT 308 1.6 e-HDi 92 CV/5CV/CTOK",
     price: "6990",
     localisation: "Paris",
@@ -7,6 +8,7 @@ export default [
     categorie: "voiture",
   },
   {
+    id: 1,
     title: "MINI ENCEINTE -Haut-Parleur avec Micro Speaker Bluetooth LIVOO",
     price: "10",
     localisation: "Marseille",
@@ -14,6 +16,7 @@ export default [
     categorie: "enceinte",
   },
   {
+    id: 2,
     title: "Enceinte BLUETOOTH et filaire",
     price: "102",
     localisation: "Montpellier",
@@ -21,6 +24,7 @@ export default [
     categorie: "enceinte",
   },
   {
+    id: 3,
     title: "PEUGEOT 308 1.6 e-HDi 92 CV/5CV/CTOK",
     price: "6990",
     localisation: "Paris",
@@ -28,6 +32,7 @@ export default [
     categorie: "voiture",
   },
   {
+    id: 4,
     title: "MINI ENCEINTE -Haut-Parleur avec Micro Speaker Bluetooth LIVOO",
     price: "10",
     localisation: "Marseille",
@@ -35,6 +40,7 @@ export default [
     categorie: "enceinte",
   },
   {
+    id: 5,
     title: "Enceinte BLUETOOTH et filaire",
     price: "102",
     localisation: "Montpellier",

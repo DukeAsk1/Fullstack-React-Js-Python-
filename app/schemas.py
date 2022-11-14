@@ -27,6 +27,7 @@ class UserBase(BaseModel):
 
 class UserLogin(UserBase):
     password: str
+    
 
 class UserCreate(UserBase):
     id: Annotated[str, Field(default_factory=lambda: uuid4().hex)]
@@ -38,10 +39,15 @@ class UserCreate(UserBase):
     address: str
     description: Optional[str]
     #is_active : bool
+     #disabled: bool
     created_at: Annotated[datetime, Field(default_factory=lambda: datetime.now())]
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str    
     
-
+class TokenData(BaseModel):
+    username: Optional[str] = None
 
     
 

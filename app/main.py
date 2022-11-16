@@ -157,4 +157,24 @@ async def read_users_me(current_user: schemas.UserBase = Depends(get_current_act
     return current_user
 
 
+@app.get('/posts', response_model=schemas.Post)
+def get_posts(db: Session= Depends(get_db)):
+    return cruds.get_posts(db)
+
+@app.get('/posts/{post_id}', response_model=schemas.Post)
+def get_post(post_id: int,db: Session= Depends(get_db)):
+    return cruds.get_post(db,user_id=post_id)
+
+@app.get('/posts/{cat_id}', response_model=schemas.Post)
+def get_post(cat_id: str,db: Session= Depends(get_db)):
+    return cruds.get_posts_by_category(db,cat=cat_id)
+
+@app.post("/posts", response_model=schemas.Post)
+def create_post(post: schemas.Post, db: Session = Depends(get_db)):
+    return cruds.create_post(db=db, post=post)
+
+# get_post
+# get_user_profile
+# create_post
+# get_cat
 

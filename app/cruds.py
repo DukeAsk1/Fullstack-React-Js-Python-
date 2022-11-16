@@ -14,6 +14,8 @@ ALGORITHM = "HS256"
 # oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
+# SCHOOL 
+
 def get_school(db: Session, user_id: int):
     return db.query(models.School).filter(models.School.id == user_id).first()
 
@@ -47,6 +49,8 @@ def create_list_school(db: Session):
     db.refresh(school1)
     school1.id = str(school1.id)
 
+# LOGIN
+
 def verify_password(plain_password, base_password):
     if plain_password != base_password:
         return False
@@ -64,24 +68,6 @@ def authentificate_user(db: Session, username: str, pass_word: str):
     return user
 
 
-
-def get_login_user(db: Session, user_name: str,user_pwd:str):
-    try:
-        username = db.query(models.User.username).filter(models.User.username == user_name).first()
-        password = db.query(models.User.password).filter(models.User.password== user_pwd).first()
-        return username,password
-    except:
-        return False
-
-    #pass
-
-# def create_user(db: Session, user: schemas.User):
-#     db_user = models.User(**user.dict())
-#     db.add(db_user)
-#     db.commit()
-#     db.refresh(db_user)
-#     db_user.id = str(db_user.id)
-#     return db_user
 
 def create_user(db: Session, user: schemas.UserCreate):
     #fake_hashed_password = user.password + "notreallyhashed"
@@ -116,23 +102,6 @@ def create_list_user(db: Session):
     db.refresh(user1)
     user1.id = str(user1.id)
 
-# def get_current_user(db: Session) :
-#     credentials_exception : HTTPException(
-#         status_code=status.HTTP_401_UNAUTHORIZED,
-#         detail="Could not validate credentials",
-#         headers={"WWW-Authenticate": "Bearer"})
-#     # try:
-#     #     payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-#     #     username: str = payload.get("sub")
-#     #     if username is None:
-#     #         raise credentials_exception
-#     #     token_data = TokenData(username=username)
-#     # except JWTError:
-#     #     raise credentials_exception
-#     user = await get_user(db, username=token_data.username)
-#     if user is None:
-#         raise credentials_exception
-#     return user
 
 
 
@@ -177,3 +146,51 @@ def create_access_token(data: dict):
 #         headers={"WWW-Authenticate": "Bearer"},
 #     )
 #     return verify_token(data, credentials_exception)
+
+# POST
+
+def create_post(db: Session, post: schemas.Post):
+    #record = db.query(models.School).filter(models.School.id == school.id).first()
+    #if record:
+    #    raise HTTPException(status_code=409, detail="Already exists")
+    db_post = models.Post(**post.dict())
+    db.add(db_post)
+    db.commit()
+    db.refresh(db_post)
+    db_post.id = str(db_post.id)
+    return db_post
+
+
+def get_post(db: Session, user_id: int):
+    return db.query(models.Post).filter(models.Post.id == user_id).first()
+
+def get_posts(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Post).offset(skip).limit(limit).all()
+
+
+# Fixer des valeurs dans le form des posts
+# Codes par lettres: H (Habits) V (Véhicule) M (Musique) S (Sport)  
+
+
+def get_posts_by_category(db: Session, cat: str, skip: int = 0, limit: int = 100):
+    return db.query(models.Post).filter(models.Post.category == cat).offset(skip).limit(limit).all()
+
+# COMMENT
+
+def create_comment(db: Session, comment: schemas.Comment):
+    #record = db.query(models.School).filter(models.School.id == school.id).first()
+    #if record:
+    #    raise HTTPException(status_code=409, detail="Already exists")
+    db_comment = models.Comment(**comment.dict())
+    db.add(db_comment)
+    db.commit()
+    db.refresh(db_comment)
+    db_comment.id = str(db_comment.id)
+    return db_comment
+
+
+def get_comment(db: Session, user_id: int):
+    return db.query(models.Comment).filter(models.Comment.id == user_id).first()
+
+
+

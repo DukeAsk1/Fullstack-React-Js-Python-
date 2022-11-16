@@ -51,13 +51,6 @@ class TokenData(BaseModel):
 
     
 
-
-
-
-
-
-
-
 class School(BaseModel):
     id: Annotated[str, Field(default_factory=lambda: uuid4().hex)]
     name: str
@@ -82,6 +75,7 @@ class Comment(BaseModel):
 class Post(BaseModel):
     id: Annotated[str, Field(default_factory=lambda: uuid4().hex)]
     title: str
+    category : str
     jpeg: str
     description: str
     price: float

@@ -39,7 +39,6 @@ class UserCreate(UserBase):
     address: str
     description: Optional[str]
     #is_active : bool
-     #disabled: bool
     created_at: Annotated[datetime, Field(default_factory=lambda: datetime.now())]
 
 class Token(BaseModel):

@@ -5,3 +5,7 @@ psycopg2
 python-slugify
 fastapi
 pybase64
+passlib
+python-multipart
+fastapi-users
+python-jose

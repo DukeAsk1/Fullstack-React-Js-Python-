@@ -44,6 +44,7 @@ class Post(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, index=True)
     #seller = relationship("User")
     title = Column(String)
+    category : Column(String) #Valeurs fixées, style checkbox
     jpeg = Column(Integer)
     description = Column(String)
     price = Column(Float)

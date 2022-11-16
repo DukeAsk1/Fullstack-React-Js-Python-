@@ -8,6 +8,7 @@ class User(Base):
     __tablename__ = "User"
 
     id = Column(UUID(as_uuid=True), primary_key=True, index=True)
+    school_id = Column(UUID(as_uuid=True), ForeignKey("School.id"))
     firstname = Column(String)
     lastname = Column(String)
     username = Column(String)
@@ -16,7 +17,7 @@ class User(Base):
     address = Column(String)
     description = Column(String)
     created_at = Column(DateTime())
-    #school = relationship("School")
+    school = relationship("School")
 
 
 class School(Base):
@@ -31,8 +32,8 @@ class School(Base):
 class Comment(Base):
     __tablename__ = "Comment"
     id = Column(UUID(as_uuid=True), primary_key=True, index=True)
-    #buyer = relationship("User")
-    #seller = relationship("User")
+    buyer = relationship("User")
+    seller = relationship("User")
     content = Column(String)
     rating = Column(Integer)
     created_at = Column(DateTime())

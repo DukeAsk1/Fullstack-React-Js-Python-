@@ -51,7 +51,7 @@ async def startup_event(db: Session = SessionLocal()):
 def read_root():
     return {"Hello": "World"}
 
-@app.put("/create", response_model=schemas.School)
+@app.put("/create_school", response_model=schemas.School)
 async def create(school: schemas.School, db: Session = Depends(get_db)):
     return cruds.create_school(db,school)
 

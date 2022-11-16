@@ -41,18 +41,11 @@ async def startup_event(db: Session = SessionLocal()):
     # cruds.create_list_school(db)
     
 
-# @app.get("/")
-# def read_root():
-#     return {"Hello": "World"}
 
 # @app.get("/date")
 # async def update_date():
 #     return {"Date today" : datetime.now()}
 
-# @app.get("/api/headers")
-# def read_hello(request: Request, x_userinfo: Optional[str] = Header(None, convert_underscores=True), ):
-#     print(request["headers"])
-#     return {"Headers": json.loads(base64.b64decode(x_userinfo))}
 
 @app.get("/")
 def read_root():
@@ -65,12 +58,6 @@ async def create(school: schemas.School, db: Session = Depends(get_db)):
 @app.get("/list_school")
 def get_list_ids(db: Session= Depends(get_db)):
     return cruds.get_list_school(db)
-
-# @app.put("/login")
-# def get_login_info(user: schemas.UserLogin,db: Session= Depends(get_db)):
-#     username = user.username
-#     password = user.password
-#     return cruds.get_login_user(db,username,password)
 
 @app.post("/users", response_model=schemas.UserCreate)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
@@ -86,16 +73,6 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 #     return users
 
 @app.post("/login", response_model=schemas.Token)
-# async def login_user(user: schemas.UserLogin, db: Session = Depends(get_db)):#form_data: OAuth2PasswordRequestForm = Depends())
-    #user = await cruds.authentificate_user(db, form_data.username, form_data.password)
-    # user_info = cruds.get_user(db, user.username)
-    # if not user_info or user_info.password != user.password:
-    #     raise HTTPException(
-    #         status_code=400,#status.HTTP_401_UNAUTHORIZED,
-    #         detail="Incorrect username or password",
-    #         headers={"WWW-Authenticate": "Bearer"},
-    #     )
-    # return user_info
 async def login(request: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.username == request.username).first()
     if not user:
@@ -121,15 +98,9 @@ async def login(request: OAuth2PasswordRequestForm = Depends(), db: Session = De
 def get_list_ids(db: Session= Depends(get_db)):
     return cruds.get_list_user(db)
 
-#current_user = fastapi_users.current_user(active=True)
-
-# @app.get("/protected-route")
-# def protected_route(user: Session = Depends(current_user)):
-#     return f"Hello, {user.username}"
-
 async def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):# -> models.User:
     credentials_exception = HTTPException(
-        status_code=402,#status.HTTP_401_UNAUTHORIZED,
+        status_code=status.HTTP_401_UNAUTHORIZED, #402
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )

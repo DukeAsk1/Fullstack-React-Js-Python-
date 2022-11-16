@@ -36,12 +36,14 @@ def create_school(db: Session, school: schemas.School):
 def get_list_school(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.School).offset(skip).limit(limit).all()
 
+school1 = models.School(
+    id= str(uuid.uuid4()),
+    name= "ESIEE Paris",
+    address= "Boulevard Blaise Pascal",
+    description= "Ecole d'ingénieurs",
+    created_at = datetime.now())
+
 def create_list_school(db: Session):
-    school1 = models.School(
-        id= str(uuid.uuid4()),
-        name= "ESIEE Paris",
-        address= "Boulevard Blaise Pascal",
-        description= "Ecole d'ingénieurs")
     db.add(school1)
     db.commit()
     db.refresh(school1)
@@ -87,28 +89,39 @@ def get_list_user(db: Session, skip: int = 0, limit: int = 100):
 def create_list_user(db: Session):
     user1 = models.User(
         id= str(uuid.uuid4()),
+        school_id = school1.id,
         firstname = "Hoang-Duc",
         lastname = "DUONG",
         username = "duongh",
         email = "hoang-duc.duong@edu.esiee.fr",
         password = "duongh",
         address = "12 rue Vivaldi",
-        description = "Manque la ville")
+        city = "Campagne",
+        description = "J'adore Black Pink",
+        created_at = datetime.now())
+
+    user2 = models.User(
+        id= str(uuid.uuid4()),
+        school_id = school1.id,
+        firstname = "Anthony",
+        lastname = "Efayong",
+        username = "0Semag0",
+        email = "anthony.efayong@edu.esiee.fr",
+        password = "duongh",
+        address = "3 Rue Pierre Lescot",
+        city = "Campagne",
+        description = "J'adore Rocket League",
+        created_at = datetime.now())
+
     db.add(user1)
+    db.add(user2)
     db.commit()
     db.refresh(user1)
+    db.refresh(user2)
     user1.id = str(user1.id)
+    user2.id = str(user2.id)
 
 
-
-
-# "username": "duongh",
-#   "firstname": "Hoang-Duc",
-#   "lastname": "DUONG",
-#   "email": "hoang-duc.duong@edu.esiee.fr",
-#   "password": "duongh",
-#   "address": "12 rue Vivaldi",
-#   "description": "16-06"
 
 def create_access_token(data: dict):
     to_encode = data.copy()
@@ -163,4 +176,6 @@ def get_comment(db: Session, user_id: int):
     return db.query(models.Comment).filter(models.Comment.id == user_id).first()
 
 
+def get_users_by_school(db: Session, school_id: str):
+    return db.query(models.User).filter(models.User.school_id == school_id).all()
 

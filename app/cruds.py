@@ -23,6 +23,20 @@ def create_school(db: Session, school: schemas.School):
     db_school.id = str(db_school.id)
     return db_school
 
-def get_list(db: Session, skip: int = 0, limit: int = 100):
+def create_user(db: Session, user: schemas.User):
+    #record = db.query(models.User).filter(models.User.id == user.id).first()
+    #if record:
+    #    raise HTTPException(status_code=409, detail="Already exists")
+    db_user = models.User(**user.dict())
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    db_user.id = str(db_user.id)
+    return db_user
+
+
+def get_list_schools(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.School).offset(skip).limit(limit).all()
 
+def get_list_users(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.User).offset(skip).limit(limit).all()

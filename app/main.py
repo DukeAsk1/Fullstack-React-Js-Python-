@@ -44,10 +44,20 @@ def read_hello(request: Request, x_userinfo: Optional[str] = Header(None, conver
 def read_root():
     return {"Hello": "World"}
 
-@app.put("/create", response_model=schemas.School)
+@app.put("/create_school", response_model=schemas.School)
 async def create(school: schemas.School, db: Session = Depends(get_db)):
     return cruds.create_school(db,school)
 
-@app.get("/list")
-def get_list_ids(db: Session= Depends(get_db)):
-    return cruds.get_list(db)
+
+@app.put("/create_user", response_model=schemas.User)
+async def create(user: schemas.User, db: Session = Depends(get_db)):
+    return cruds.create_user(db,user)
+
+
+@app.get("/list_schools")
+def get_list_schools(db: Session= Depends(get_db)):
+    return cruds.get_list_schools(db)
+
+@app.get("/list_users")
+def get_list_users(db: Session= Depends(get_db)):
+    return cruds.get_list_users(db)

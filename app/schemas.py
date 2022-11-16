@@ -7,6 +7,7 @@ from typing_extensions import Annotated
 
 class User(BaseModel):
     id: Annotated[str, Field(default_factory=lambda: uuid4().hex)]
+    school_id: Optional[Annotated[str, Field(default_factory=lambda: uuid4().hex)]]
     firstname: str
     lastname: str
     username: str

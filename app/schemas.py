@@ -21,7 +21,7 @@ from typing_extensions import Annotated
 
 class UserBase(BaseModel):
     username: str
-
+    id: str
     class Config:
         orm_mode = True
 

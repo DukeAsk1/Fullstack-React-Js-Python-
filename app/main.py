@@ -118,6 +118,8 @@ async def get_current_user(db: Session = Depends(get_db), token: str = Depends(o
     return user
 
 async def get_current_active_user(current_user: schemas.UserBase = Depends(get_current_user)):
+    print(current_user.username)
+    current_user.id=str(current_user.id)
     if not current_user:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user

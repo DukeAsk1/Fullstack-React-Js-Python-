@@ -33,7 +33,6 @@ Voici l'inventaire des fichiers présents dans notre projet :
 - le fichier [`.gitignore`](https://git.esiee.fr/duongh/fullstack_data/-/blob/master/.gitignore) qui va nous aider à ignorer les fichiers non modifié, comme par exemple les extensions JavaScripts utiles pour les modules qu'on ne va pas modifier, ainsi que les caches Python. 
 - le fichier [`Dockerfile`](https://git.esiee.fr/duongh/fullstack_data/-/blob/master/Dockerfile) contenant l'extension `FastAPI` que nous allons utiliser, et les commandes pour compiler les `requirements` pour nos modules Python. 
 - le fichier [`docker-compose.yml`](https://git.esiee.fr/duongh/fullstack_data/-/blob/master/docker-compose.yml) qui va lister toutes les `images Docker` que nous allons utiliser pour la partie `Backend` pour notre site.
-
 # USER'S GUIDE 
 
 ## Installation des packages nécessaires

@@ -61,4 +61,34 @@ Certains packages seront également nécessaires à installer pour la bonne util
 ## Fonctionnement de l'application Web
 
 
+# DEVELOPPER'S GUIDE
+
+## Structure de l'architecture
+\
+Après avoir énumérer les étapes et fichiers nécessaires à l'initialisation de notre plateforme, voyons maintenant la structure de notre dossier projet:
+- Dockerfile
+- docker-compose.yml
+- requirements.txt
+- my-app/
+  + public/
+  + src/
+    * Templates JS
+  + nodes-modules
+  + package-lock.json
+  + package.json
+- app/
+  + cruds.py
+  + database.py
+  + main.py
+  + models.py
+  + schemas.py
+
+Nous avons divisé l'architecture de notre application back sous la forme de plusieurs fichiers qui vont chacun avoir leur role pour l'initialisation des données dans nos pages JavaScripts. Il y'aura notamment:
+- `cruds` qui contient les fonctions extrayants les informations de la base de données
+- `database` qui génère notre base de données
+- `models` qui crée les tables de notre base
+- `schemas` qui crée des sous-tables spécifiques pour l'utilisation dans nos pages et cruds
+- `main` qui va aller chercher les fonctions de `cruds` et va alimenter les routes pour nos pages JavaScript 
+
+
 Séance 28/10 : add link to routers from postgre (ex: create links)

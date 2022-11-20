@@ -90,5 +90,17 @@ Nous avons divisé l'architecture de notre application back sous la forme de plu
 - `schemas` qui crée des sous-tables spécifiques pour l'utilisation dans nos pages et cruds
 - `main` qui va aller chercher les fonctions de `cruds` et va alimenter les routes pour nos pages JavaScript 
 
+## First Step : Création de la base de données
+
+Pour notre base de données, nous sommes repartis sur la première version de notre image PostgreSQL, utiliser un `engine` basé sur la librairie SQLAlchemy pour créer une session locale de notre base de données. \
+Nous allons ensuite remplir la base de données en créant plusieurs tables dans le fichier `models.py`. Pour notre site, nous aurons besoin de plusieurs éléments comme une annonce, des utilisateurs, des commentaires, des écoles liées à la personne. Chacun de ces éléments va constituer une table dans notre base.\
+Pour la table des utilisateurs, nous aurons besoin d'un id généré aléatoire, un nom, prénom, username, et une adresse e-mail et une adresse.\
+Les écoles auront une description, nom en général et une adresse.\
+Les commentaires auront un message venant d'un destinataire et d'un vendeur, et avec un notation.
+## Second Step : Définition des valeurs des liens de pages
+
+Nous devons ensuite définir le contenu que nous voulons déployer sur chaque page. 
+
+
 
 Séance 28/10 : add link to routers from postgre (ex: create links)

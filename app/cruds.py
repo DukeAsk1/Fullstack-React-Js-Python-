@@ -84,20 +84,27 @@ def get_user_by_email(db: Session, email: str):
 def get_list_user(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
-def create_list_user(db: Session):
-    user1 = models.User(
-        id= str(uuid.uuid4()),
-        firstname = "Hoang-Duc",
-        lastname = "DUONG",
-        username = "duongh",
-        email = "hoang-duc.duong@edu.esiee.fr",
-        password = "duongh",
-        address = "12 rue Vivaldi",
-        description = "Manque la ville")
-    db.add(user1)
-    db.commit()
-    db.refresh(user1)
-    user1.id = str(user1.id)
+def create_list_user(db: Session,list_user):
+    for i in list_user:
+    # user1 = models.User(
+    #     id= str(uuid.uuid4()),
+    #     firstname = "Hoang-Duc",
+    #     lastname = "DUONG",
+    #     username = "duongh",
+    #     email = "hoang-duc.duong@edu.esiee.fr",
+    #     password = "duongh",
+    #     address = "12 rue Vivaldi",
+    #     description = "Manque la ville")
+        db_user = models.User(id= str(uuid.uuid4()),**i)
+        print(db_user)
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        db_user.id = str(db_user.id)
+    # db.add(user1)
+    # db.commit()
+    # db.refresh(user1)
+    # user1.id = str(user1.id)
 
 
 

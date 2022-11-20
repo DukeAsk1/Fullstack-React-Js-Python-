@@ -38,6 +38,8 @@ class UserCreate(UserBase):
     username : str
     password: str
     address: str
+    city = str
+    postal_code = str
     description: Optional[str]
     #is_active : bool
     created_at: Annotated[datetime, Field(default_factory=lambda: datetime.now())]

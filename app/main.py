@@ -37,7 +37,9 @@ app = FastAPI(
 @app.on_event("startup")
 async def startup_event(db: Session = SessionLocal()):
     Base.metadata.create_all(bind=engine)
-    # cruds.create_list_user(db)
+    data_user = json.loads(open('json_db/users.json').read())
+    #print(len(data_user))
+    cruds.create_list_user(db,data_user)
     # cruds.create_list_school(db)
     
 

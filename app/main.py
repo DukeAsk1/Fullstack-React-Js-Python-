@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends,Header, Request, HTTPException, status
+from fastapi import FastAPI, Depends,Header, Request, HTTPException, status, UploadFile,File
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from typing import Optional
 from datetime import datetime
@@ -12,6 +12,7 @@ import database
 #import fastapi_users
 import models
 from jose import JWTError, jwt
+from typing import Union
 
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
@@ -145,8 +146,21 @@ def get_post(cat_id: str,db: Session= Depends(get_db)):
     return cruds.get_posts_by_category(db,cat=cat_id)
 
 @app.post("/posts", response_model=schemas.Post)
-def create_post(post: schemas.Post, db: Session = Depends(get_db)):
-    return cruds.create_post(db=db, post=post)
+def create_post(post: schemas.Post,file: UploadFile=File(...), db: Session = Depends(get_db)):
+    return cruds.create_post(db=db, jpeg=file, post=post)
+
+@app.post("/uploadfile/")
+async def create_upload_file(file: UploadFile=File(...)):
+#https://github.com/tiangolo/fastapi/issues/3364
+#https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+    return {"filename": file.filename}
+
+# @app.post("/uploadfile/",response_model=schemas.Post)
+# async def create_upload_file(file: Union[UploadFile, None] = None):
+#     if not file:
+#         return {"message": "No upload file sent"}
+#     else:
+#         return {"filename": file.filename}
 
 # get_post
 # get_user_profile

@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.dialects.postgresql import UUID
 from datetime import datetime, timedelta
 import models, schemas
-from fastapi import HTTPException, status, Depends
+from fastapi import HTTPException, status, Depends,UploadFile,File
 import uuid
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
@@ -126,7 +126,7 @@ def create_access_token(data: dict):
 
 # POST
 
-def create_post(db: Session, post: schemas.Post):
+def create_post(db: Session, file : UploadFile, post: schemas.Post):
     #record = db.query(models.School).filter(models.School.id == school.id).first()
     #if record:
     #    raise HTTPException(status_code=409, detail="Already exists")

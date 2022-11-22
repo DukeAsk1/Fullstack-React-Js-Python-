@@ -3,6 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 from uuid import uuid4
 from typing_extensions import Annotated
+from fastapi import UploadFile
 
 
 # class User(BaseModel):
@@ -78,7 +79,8 @@ class Post(BaseModel):
     id: Annotated[str, Field(default_factory=lambda: uuid4().hex)]
     title: str
     category : str
-    jpeg: str
+    jpeg : Optional[UploadFile]
+    #jpeg : str
     description: str
     price: float
     created_at: Annotated[datetime, Field(default_factory=lambda: datetime.now())]

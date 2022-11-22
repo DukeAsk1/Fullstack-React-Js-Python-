@@ -132,11 +132,12 @@ def create_access_token(data: dict):
 
 # POST
 
-def create_post(db: Session, post: schemas.Post):
+def create_post(db: Session, current_user: schemas.UserBase, post: schemas.Post):
     #record = db.query(models.School).filter(models.School.id == school.id).first()
     #if record:
     #    raise HTTPException(status_code=409, detail="Already exists")
     db_post = models.Post(**post.dict())
+    db_post.seller_id = current_user.id
     db.add(db_post)
     db.commit()
     db.refresh(db_post)
@@ -160,11 +161,13 @@ def get_posts_by_category(db: Session, cat: str, skip: int = 0, limit: int = 100
 
 # COMMENT
 
-def create_comment(db: Session, comment: schemas.Comment):
+def create_comment(db: Session, current_user: schemas.UserBase, post_id: schemas.Post, comment: schemas.Comment):
     #record = db.query(models.School).filter(models.School.id == school.id).first()
     #if record:
     #    raise HTTPException(status_code=409, detail="Already exists")
     db_comment = models.Comment(**comment.dict())
+    db_comment.buyer_id = current_user.id
+    db_comment.post_id = post_id
     db.add(db_comment)
     db.commit()
     db.refresh(db_comment)
@@ -179,3 +182,5 @@ def get_comment(db: Session, user_id: int):
 def get_users_by_school(db: Session, school_id: str):
     return db.query(models.User).filter(models.User.school_id == school_id).all()
 
+def get_comments_by_post(db: Session, post_id: str):
+    return db.query(models.Comment).filter(models.Comment.post_id == post_id).all()

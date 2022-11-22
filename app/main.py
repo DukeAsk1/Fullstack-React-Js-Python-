@@ -129,7 +129,18 @@ def get_post(cat_id: str,db: Session= Depends(get_db)):
 
 @app.post("/posts", response_model=schemas.Post)
 def create_post(post: schemas.Post, db: Session = Depends(get_db)):
-    return cruds.create_post(db=db, post=post)
+    current_user = Depends(get_current_active_user)
+    return cruds.create_post(db=db, current_user=current_user, post=post)
+
+@app.post('/posts/{post_id}/createcomment', response_model=schemas.Post)
+def create_comment(post_id: int,db: Session= Depends(get_db)):
+    current_user = Depends(get_current_active_user)
+    return cruds.create_comment(db=db, current_user=current_user, post_id=post_id,user_id=post_id)
+
+@app.post('/posts/{post_id}/comments', response_model=schemas.Post)
+def create_comment(post_id: int,db: Session= Depends(get_db)):
+    current_user = Depends(get_current_active_user)
+    return cruds.create_comment(db=db, current_user=current_user, post_id=post_id,user_id=post_id)
 
 @app.get('/usersbyschool')
 def get_users_by_school(school_id: str, db: Session= Depends(get_db)):

@@ -35,10 +35,12 @@ class Comment(Base):
     __tablename__ = "Comment"
     id = Column(UUID(as_uuid=True), primary_key=True, index=True)
     buyer_id = Column(UUID(as_uuid=True), ForeignKey("User.id"))
+    post_id = Column(UUID(as_uuid=True), ForeignKey("Post.id"))
     content = Column(String)
     rating = Column(Integer)
     created_at = Column(DateTime())
 
+    post = relationship("Post")
     buyer = relationship("User")
 
 
@@ -47,8 +49,8 @@ class Post(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, index=True)
     seller_id = Column(UUID(as_uuid=True), ForeignKey("User.id"))
     title = Column(String)
-    category : Column(String) #Valeurs fixées, style checkbox
-    jpeg = Column(Integer)
+    category = Column(String) #Valeurs fixées, style checkbox
+    jpeg = Column(String)
     description = Column(String)
     price = Column(Float)
     created_at = Column(DateTime())

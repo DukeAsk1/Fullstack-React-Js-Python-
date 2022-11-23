@@ -54,7 +54,6 @@ def verify_password(plain_password, base_password):
 
 def authentificate_user(db: Session, username: str, pass_word: str):
     user = get_user(db, username)
-    print(user)
     if not user:
         return False
     if pass_word != user.password:
@@ -83,25 +82,11 @@ def get_list_user(db: Session, skip: int = 0, limit: int = 100):
 
 def create_list_user(db: Session,list_user):
     for i in list_user:
-    # user1 = models.User(
-    #     id= str(uuid.uuid4()),
-    #     firstname = "Hoang-Duc",
-    #     lastname = "DUONG",
-    #     username = "duongh",
-    #     email = "hoang-duc.duong@edu.esiee.fr",
-    #     password = "duongh",
-    #     address = "12 rue Vivaldi",
-    #     description = "Manque la ville")
         db_user = models.User(id= str(uuid.uuid4()),**i)
-        print(db_user)
         db.add(db_user)
         db.commit()
         db.refresh(db_user)
         db_user.id = str(db_user.id)
-    # db.add(user1)
-    # db.commit()
-    # db.refresh(user1)
-    # user1.id = str(user1.id)
 
 
 
@@ -115,11 +100,6 @@ def create_access_token(data: dict):
 # POST
 
 def create_post(db: Session,post: schemas.Post):
-    #record = db.query(models.School).filter(models.School.id == school.id).first()
-    #if record:
-    #    raise HTTPException(status_code=409, detail="Already exists")
-    #print(type(**post.dict()))
-    #print(post)
     db_post = models.Post(**post.dict())
     db.add(db_post)
     db.commit()
@@ -128,7 +108,16 @@ def create_post(db: Session,post: schemas.Post):
     #print(db_post.id)
     return db_post
 
-def get_post(db: Session, user_id: int):
+def add_image(db: Session, data:str, id:str):
+    db_post = db.query(models.Post).filter(models.Post.id == id).first()
+    db.delete(db_post)
+    db_post.jpeg = data
+    db.add(db_post)
+    db.commit()
+    db.refresh(db_post)
+    return db_post
+
+def get_post_by_id(db: Session, user_id: int):
     return db.query(models.Post).filter(models.Post.id == user_id).first()
 
 def get_posts(db: Session, skip: int = 0, limit: int = 100):

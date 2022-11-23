@@ -133,21 +133,24 @@ async def read_users_me(current_user: schemas.UserBase = Depends(get_current_act
     return current_user
 
 
-@app.get('/posts', response_model=schemas.Post)
+@app.get('/posts')
 def get_posts(db: Session= Depends(get_db)):
     return cruds.get_posts(db)
 
 @app.get('/posts/{post_id}', response_model=schemas.Post)
 def get_post(post_id: int,db: Session= Depends(get_db)):
-    return cruds.get_post(db,user_id=post_id)
+    return cruds.get_post_by_id(db,user_id=post_id)
 
 @app.get('/posts/{cat_id}', response_model=schemas.Post)
 def get_post(cat_id: str,db: Session= Depends(get_db)):
     return cruds.get_posts_by_category(db,cat=cat_id)
 
-@app.post("/posts")#, response_model=schemas.Post)
-def create_post(post: schemas.Post,db: Session = Depends(get_db), file: UploadFile=File(...)):
-    print(post)
+@app.post("/create_post", response_model = schemas.Post)
+def create_post(post: schemas.Post, db: Session = Depends(get_db)):
+    return cruds.create_post(db,post)
+
+@app.post("/add_image")
+def add_image(id: str, file: UploadFile=File(...), db: Session = Depends(get_db)):
     try:        
         im = Image.open(file.file)
         if im.mode in ("RGBA", "P"): 
@@ -161,34 +164,10 @@ def create_post(post: schemas.Post,db: Session = Depends(get_db), file: UploadFi
         buf.seek(0)  # to rewind the cursor to the start of the buffer
     except Exception:
         print('marche pas')
-    val = {"jpeg":enc_data}
-
-    # Serializing json  
-    json_object = json.dumps(val) 
-
-    # if file.content_type not in ["image/jpeg", "image/png"]:
-    #     raise HTTPException(400, detail="Invalid document type")
-    # # print(type(file))
-    # try:        
-    #     im = Image.open(file.file)
-    #     if im.mode in ("RGBA", "P"): 
-    #         im = im.convert("RGB")
-    #     buf = io.BytesIO()
-    #     im.save(buf, 'JPEG', quality=50)
-    #     # to get the entire bytes of the buffer use:
-    #     contents = buf.getvalue()
-    #     enc_data = base64.b64encode(contents)
-    #     # or, to read from `buf` (which is a file-like object), call this first:
-    #     buf.seek(0)  # to rewind the cursor to the start of the buffer
-    # except Exception:
-    #     print('marche pas')
-    # print(type(enc_data))
-    post.jpeg = json_object
-    return cruds.create_post(db,post)
+    return cruds.add_image(db=db, data=enc_data, id=id)
 
 @app.post("/uploadfile")
 def create_upload_file(file: UploadFile=File(...)):
-    #print(type(file))
     try:        
         im = Image.open(file.file)
         if im.mode in ("RGBA", "P"): 
@@ -202,38 +181,7 @@ def create_upload_file(file: UploadFile=File(...)):
         buf.seek(0)  # to rewind the cursor to the start of the buffer
     except Exception:
         print('marche pas')
-#     if file.content_type not in ["image/jpeg", "image/png"]:
-#         raise HTTPException(400, detail="Invalid document type")
-    # import base64
-    #print(enc_data)
-  
-    # with open(file, "rb") as image2string:
-    #     converted_string = base64.b64encode(image2string.read())
-    # print(converted_string)
-    
-    # with open('encode.bin', "wb") as file:
-    #     file.write(converted_string)
-    #     print(type(file.file.read()))
-    # try:
-    #     #with open(file, 'rb') as f:   
-    #     img_data = file.file.read()
-    #         #f.close()
-    #     enc_data = base64.b64encode(img_data)
-    # except:
-    #     print("marche pas")
-    # print(str(enc_data))
-#     cruds.create_post()
-    #json.dump({'image':enc_data}, open('c:/out.json', 'w'))
-#https://github.com/tiangolo/fastapi/issues/3364
-#https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
     return enc_data
-
-# @app.post("/uploadfile/",response_model=schemas.Post)
-# async def create_upload_file(file: Union[UploadFile, None] = None):
-#     if not file:
-#         return {"message": "No upload file sent"}
-#     else:
-#         return {"filename": file.filename}
 
 @app.get('/usersbyschool')
 def get_users_by_school(school_id: str, db: Session= Depends(get_db)):

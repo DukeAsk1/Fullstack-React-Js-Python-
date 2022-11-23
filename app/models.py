@@ -35,25 +35,25 @@ class School(Base):
 class Comment(Base):
     __tablename__ = "Comment"
     id = Column(UUID(as_uuid=True), primary_key=True, index=True)
-    buyer_id = Column(UUID(as_uuid=True), ForeignKey("User.id"))
-    #buyer = relationship("User")
-    #seller = relationship("User")
+    #buyer_id = Column(UUID(as_uuid=True), ForeignKey("User.id"))
+
     content = Column(String)
     rating = Column(Integer)
     created_at = Column(DateTime())
 
-    buyer = relationship("User")
+    #buyer = relationship("User")
+    #seller = relationship("User")
 
 
 class Post(Base):
     __tablename__ = "Post"
     id = Column(UUID(as_uuid=True), primary_key=True, index=True)
-    seller_id = Column(UUID(as_uuid=True), ForeignKey("User.id"))
+    #seller_id = Column(UUID(as_uuid=True), ForeignKey("User.id"))
     title = Column(String)
     category = Column(String) #Valeurs fixées, style checkbox
     jpeg = Column(String)
     description = Column(String)
-    price = Column(Float)
+    #price = Column(Float)
     created_at = Column(DateTime())
 
-    seller = relationship("User")
+    #seller = relationship("User")

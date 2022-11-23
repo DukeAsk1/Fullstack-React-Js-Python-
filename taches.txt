@@ -14,3 +14,16 @@ recupère les informations de l'utilisateurs qui est login par rapport à la ses
 
 
 register : pareil
+
+
+login 
+
+session active
+
+explorer (école,  post en général)
+
+user settings( display get user)
+
+panier(front)
+
+

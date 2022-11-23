@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends,Header, Request, HTTPException, status, UploadFile,File
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 from datetime import datetime
 from datetime import datetime
@@ -16,6 +17,8 @@ from typing import Union
 import psycopg2
 from PIL import Image
 import io
+
+
 
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
@@ -36,6 +39,14 @@ app = FastAPI(
     title="My title",
     description="My description",
     version="0.0.1",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[""],
+    allow_credentials=True,
+    allow_methods=["POST", "GET"],
+    allow_headers=[""],
 )
 
 @app.on_event("startup")
@@ -151,7 +162,7 @@ def get_post(cat_id: str,db: Session= Depends(get_db)):
 
 @app.post("/posts")#, response_model=schemas.Post)
 def create_post(post: schemas.Post,db: Session = Depends(get_db), file: UploadFile=File(...)):
-    print(post)
+    #print(post)
     try:        
         im = Image.open(file.file)
         if im.mode in ("RGBA", "P"): 
@@ -168,7 +179,7 @@ def create_post(post: schemas.Post,db: Session = Depends(get_db), file: UploadFi
     val = {"jpeg":enc_data}
 
     # Serializing json  
-    json_object = json.dumps(val) 
+    #json_object = json.dumps(val) 
 
     # if file.content_type not in ["image/jpeg", "image/png"]:
     #     raise HTTPException(400, detail="Invalid document type")
@@ -187,8 +198,9 @@ def create_post(post: schemas.Post,db: Session = Depends(get_db), file: UploadFi
     # except Exception:
     #     print('marche pas')
     # print(type(enc_data))
-    post.jpeg = json_object
-    return cruds.create_post(db,post)
+    post = post.update(val)
+    #post.jpeg = json_object
+    return val#cruds.create_post(db,post)
 
 @app.post("/uploadfile")
 def create_upload_file(file: UploadFile=File(...)):
@@ -206,38 +218,18 @@ def create_upload_file(file: UploadFile=File(...)):
         buf.seek(0)  # to rewind the cursor to the start of the buffer
     except Exception:
         print('marche pas')
-#     if file.content_type not in ["image/jpeg", "image/png"]:
-#         raise HTTPException(400, detail="Invalid document type")
-    # import base64
-    #print(enc_data)
-  
-    # with open(file, "rb") as image2string:
-    #     converted_string = base64.b64encode(image2string.read())
-    # print(converted_string)
-    
-    # with open('encode.bin', "wb") as file:
-    #     file.write(converted_string)
-    #     print(type(file.file.read()))
-    # try:
-    #     #with open(file, 'rb') as f:   
-    #     img_data = file.file.read()
-    #         #f.close()
-    #     enc_data = base64.b64encode(img_data)
-    # except:
-    #     print("marche pas")
     # print(str(enc_data))
 #     cruds.create_post()
-    #json.dump({'image':enc_data}, open('c:/out.json', 'w'))
+    val = {"jpeg":str(enc_data)}
+
+    # Serializing json  
+    #json_object = json.dumps(val) 
+    # json.dump({'image':enc_data}, val)
+    #val = json.dump({'image':enc_data}, indent=4)
 #https://github.com/tiangolo/fastapi/issues/3364
 #https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
-    return enc_data
+    return val
 
-# @app.post("/uploadfile/",response_model=schemas.Post)
-# async def create_upload_file(file: Union[UploadFile, None] = None):
-#     if not file:
-#         return {"message": "No upload file sent"}
-#     else:
-#         return {"filename": file.filename}
 
 # get_post
 # get_user_profile

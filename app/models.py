@@ -16,6 +16,7 @@ class User(Base):
     password = Column(String)
     address = Column(String)
     city = Column(String)
+    postal_code = (Column(Integer))
     description = Column(String)
     created_at = Column(DateTime())
 

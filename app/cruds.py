@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.dialects.postgresql import UUID
 from datetime import datetime, timedelta
 import models, schemas
-from fastapi import HTTPException, status, Depends
+from fastapi import HTTPException, status, Depends,UploadFile,File
 import uuid
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
@@ -36,18 +36,13 @@ def create_school(db: Session, school: schemas.School):
 def get_list_school(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.School).offset(skip).limit(limit).all()
 
-school1 = models.School(
-    id= str(uuid.uuid4()),
-    name= "ESIEE Paris",
-    address= "Boulevard Blaise Pascal",
-    description= "Ecole d'ingénieurs",
-    created_at = datetime.now())
-
-def create_list_school(db: Session):
-    db.add(school1)
-    db.commit()
-    db.refresh(school1)
-    school1.id = str(school1.id)
+def create_list_school(db: Session,list_school):
+    for i in list_school:
+        school1 = models.School(id= str(uuid.uuid4()),**i)
+        db.add(school1)
+        db.commit()
+        db.refresh(school1)
+        school1.id = str(school1.id)
 
 # LOGIN
 
@@ -86,40 +81,27 @@ def get_user_by_email(db: Session, email: str):
 def get_list_user(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
-def create_list_user(db: Session):
-    user1 = models.User(
-        id= str(uuid.uuid4()),
-        school_id = school1.id,
-        firstname = "Hoang-Duc",
-        lastname = "DUONG",
-        username = "duongh",
-        email = "hoang-duc.duong@edu.esiee.fr",
-        password = "duongh",
-        address = "12 rue Vivaldi",
-        city = "Campagne",
-        description = "J'adore Black Pink",
-        created_at = datetime.now())
-
-    user2 = models.User(
-        id= str(uuid.uuid4()),
-        school_id = school1.id,
-        firstname = "Anthony",
-        lastname = "Efayong",
-        username = "0Semag0",
-        email = "anthony.efayong@edu.esiee.fr",
-        password = "duongh",
-        address = "3 Rue Pierre Lescot",
-        city = "Campagne",
-        description = "J'adore Rocket League",
-        created_at = datetime.now())
-
-    db.add(user1)
-    db.add(user2)
-    db.commit()
-    db.refresh(user1)
-    db.refresh(user2)
-    user1.id = str(user1.id)
-    user2.id = str(user2.id)
+def create_list_user(db: Session,list_user):
+    for i in list_user:
+    # user1 = models.User(
+    #     id= str(uuid.uuid4()),
+    #     firstname = "Hoang-Duc",
+    #     lastname = "DUONG",
+    #     username = "duongh",
+    #     email = "hoang-duc.duong@edu.esiee.fr",
+    #     password = "duongh",
+    #     address = "12 rue Vivaldi",
+    #     description = "Manque la ville")
+        db_user = models.User(id= str(uuid.uuid4()),**i)
+        print(db_user)
+        db.add(db_user)
+        db.commit()
+        db.refresh(db_user)
+        db_user.id = str(db_user.id)
+    # db.add(user1)
+    # db.commit()
+    # db.refresh(user1)
+    # user1.id = str(user1.id)
 
 
 
@@ -136,14 +118,16 @@ def create_post(db: Session, current_user: schemas.UserBase, post: schemas.Post)
     #record = db.query(models.School).filter(models.School.id == school.id).first()
     #if record:
     #    raise HTTPException(status_code=409, detail="Already exists")
+    #print(type(**post.dict()))
+    #print(post)
     db_post = models.Post(**post.dict())
     db_post.seller_id = current_user.id
     db.add(db_post)
     db.commit()
     db.refresh(db_post)
     db_post.id = str(db_post.id)
+    #print(db_post.id)
     return db_post
-
 
 def get_post(db: Session, user_id: int):
     return db.query(models.Post).filter(models.Post.id == user_id).first()

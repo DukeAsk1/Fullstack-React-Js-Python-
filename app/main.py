@@ -17,6 +17,7 @@ from typing import Union
 import psycopg2
 from PIL import Image
 import io
+from fastapi.middleware.cors import CORSMiddleware
 
 
 
@@ -42,7 +43,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[""],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["POST", "GET"],
     allow_headers=[""],
@@ -99,7 +100,7 @@ async def login(request: OAuth2PasswordRequestForm = Depends(), db: Session = De
 
 
 
-@app.get("/list_user.json")
+@app.get("/list_user")
 def get_list_ids(db: Session= Depends(get_db)):
     return cruds.get_list_user(db)
 
@@ -135,21 +136,25 @@ async def read_users_me(current_user: schemas.UserBase = Depends(get_current_act
     return current_user
 
 
-@app.get('/posts', response_model=schemas.Post)
+@app.get('/posts')
 def get_posts(db: Session= Depends(get_db)):
     return cruds.get_posts(db)
 
 @app.get('/posts/{post_id}', response_model=schemas.Post)
 def get_post(post_id: int,db: Session= Depends(get_db)):
-    return cruds.get_post(db,user_id=post_id)
+    return cruds.get_post_by_id(db,user_id=post_id)
 
 @app.get('/posts/{cat_id}', response_model=schemas.Post)
 def get_post(cat_id: str,db: Session= Depends(get_db)):
     return cruds.get_posts_by_category(db,cat=cat_id)
 
-@app.post("/posts")#, response_model=schemas.Post)
-def create_post(post: schemas.Post,db: Session = Depends(get_db), file: UploadFile=File(...)):
-    #print(post)
+@app.post("/create_post")#, response_model = schemas.Post)
+def create_post(post: schemas.Post, current_user: schemas.UserBase = Depends(get_current_active_user), db: Session = Depends(get_db)):
+    print(current_user)
+    return cruds.create_post(db,post,current_user.id)
+
+@app.post("/add_image")
+def add_image(id: str, file: UploadFile=File(...), db: Session = Depends(get_db)):
     try:        
         im = Image.open(file.file)
         if im.mode in ("RGBA", "P"): 
@@ -163,35 +168,10 @@ def create_post(post: schemas.Post,db: Session = Depends(get_db), file: UploadFi
         buf.seek(0)  # to rewind the cursor to the start of the buffer
     except Exception:
         print('marche pas')
-    val = {"jpeg":enc_data}
-
-    # Serializing json  
-    #json_object = json.dumps(val) 
-
-    # if file.content_type not in ["image/jpeg", "image/png"]:
-    #     raise HTTPException(400, detail="Invalid document type")
-    # # print(type(file))
-    # try:        
-    #     im = Image.open(file.file)
-    #     if im.mode in ("RGBA", "P"): 
-    #         im = im.convert("RGB")
-    #     buf = io.BytesIO()
-    #     im.save(buf, 'JPEG', quality=50)
-    #     # to get the entire bytes of the buffer use:
-    #     contents = buf.getvalue()
-    #     enc_data = base64.b64encode(contents)
-    #     # or, to read from `buf` (which is a file-like object), call this first:
-    #     buf.seek(0)  # to rewind the cursor to the start of the buffer
-    # except Exception:
-    #     print('marche pas')
-    # print(type(enc_data))
-    post = post.update(val)
-    #post.jpeg = json_object
-    return val#cruds.create_post(db,post)
+    return cruds.add_image(db=db, data=enc_data, id=id)
 
 @app.post("/uploadfile")
 def create_upload_file(file: UploadFile=File(...)):
-    #print(type(file))
     try:        
         im = Image.open(file.file)
         if im.mode in ("RGBA", "P"): 
@@ -205,18 +185,7 @@ def create_upload_file(file: UploadFile=File(...)):
         buf.seek(0)  # to rewind the cursor to the start of the buffer
     except Exception:
         print('marche pas')
-    # print(str(enc_data))
-#     cruds.create_post()
-    val = {"jpeg":str(enc_data)}
-
-    # Serializing json  
-    #json_object = json.dumps(val) 
-    # json.dump({'image':enc_data}, val)
-    #val = json.dump({'image':enc_data}, indent=4)
-#https://github.com/tiangolo/fastapi/issues/3364
-#https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
-    return val
-
+    return enc_data
 
 @app.get('/usersbyschool')
 def get_users_by_school(school_id: str, db: Session= Depends(get_db)):

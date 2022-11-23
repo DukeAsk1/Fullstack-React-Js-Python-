@@ -105,15 +105,6 @@ def create_list_user(db: Session,list_user):
 
 
 
-
-# "username": "duongh",
-#   "firstname": "Hoang-Duc",
-#   "lastname": "DUONG",
-#   "email": "hoang-duc.duong@edu.esiee.fr",
-#   "password": "duongh",
-#   "address": "12 rue Vivaldi",
-#   "description": "16-06"
-
 def create_access_token(data: dict):
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -169,4 +160,6 @@ def get_comment(db: Session, user_id: int):
     return db.query(models.Comment).filter(models.Comment.id == user_id).first()
 
 
+def get_users_by_school(db: Session, school_id: str):
+    return db.query(models.User).filter(models.User.school_id == school_id).all()
 

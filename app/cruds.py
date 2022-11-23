@@ -36,16 +36,13 @@ def create_school(db: Session, school: schemas.School):
 def get_list_school(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.School).offset(skip).limit(limit).all()
 
-def create_list_school(db: Session):
-    school1 = models.School(
-        id= str(uuid.uuid4()),
-        name= "ESIEE Paris",
-        address= "Boulevard Blaise Pascal",
-        description= "Ecole d'ingénieurs")
-    db.add(school1)
-    db.commit()
-    db.refresh(school1)
-    school1.id = str(school1.id)
+def create_list_school(db: Session,list_school):
+    for i in list_school:
+        school1 = models.School(id= str(uuid.uuid4()),**i)
+        db.add(school1)
+        db.commit()
+        db.refresh(school1)
+        school1.id = str(school1.id)
 
 # LOGIN
 
@@ -126,17 +123,19 @@ def create_access_token(data: dict):
 
 # POST
 
-def create_post(db: Session, file : UploadFile, post: schemas.Post):
+def create_post(db: Session,post: schemas.Post):
     #record = db.query(models.School).filter(models.School.id == school.id).first()
     #if record:
     #    raise HTTPException(status_code=409, detail="Already exists")
+    #print(type(**post.dict()))
+    #print(post)
     db_post = models.Post(**post.dict())
     db.add(db_post)
     db.commit()
     db.refresh(db_post)
     db_post.id = str(db_post.id)
+    #print(db_post.id)
     return db_post
-
 
 def get_post(db: Session, user_id: int):
     return db.query(models.Post).filter(models.Post.id == user_id).first()

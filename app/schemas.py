@@ -77,11 +77,13 @@ class Comment(BaseModel):
 
 class Post(BaseModel):
     id: Annotated[str, Field(default_factory=lambda: uuid4().hex)]
+    #seller_id : Annotated[str, Field(default_factory=lambda: uuid4().hex)]
     title: str
     category : str
-    jpeg : Optional[UploadFile]
-    #jpeg : str
-    description: str
+    jpeg : str
+    description: Optional[str]
     price: float
     created_at: Annotated[datetime, Field(default_factory=lambda: datetime.now())]
 
+    class Config:
+        orm_mode = True

@@ -16,6 +16,7 @@ class User(Base):
     password = Column(String)
     address = Column(String)
     city = Column(String)
+    postal_code = (Column(Integer))
     description = Column(String)
     created_at = Column(DateTime())
 
@@ -35,6 +36,8 @@ class Comment(Base):
     __tablename__ = "Comment"
     id = Column(UUID(as_uuid=True), primary_key=True, index=True)
     buyer_id = Column(UUID(as_uuid=True), ForeignKey("User.id"))
+    #buyer = relationship("User")
+    #seller = relationship("User")
     content = Column(String)
     rating = Column(Integer)
     created_at = Column(DateTime())
@@ -47,8 +50,8 @@ class Post(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, index=True)
     seller_id = Column(UUID(as_uuid=True), ForeignKey("User.id"))
     title = Column(String)
-    category : Column(String) #Valeurs fixées, style checkbox
-    jpeg = Column(Integer)
+    category = Column(String) #Valeurs fixées, style checkbox
+    jpeg = Column(String)
     description = Column(String)
     price = Column(Float)
     created_at = Column(DateTime())

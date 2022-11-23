@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends,Header, Request, HTTPException, status
+from fastapi import FastAPI, Depends,Header, Request, HTTPException, status, UploadFile,File
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from typing import Optional
 from datetime import datetime
@@ -12,6 +12,10 @@ import database
 #import fastapi_users
 import models
 from jose import JWTError, jwt
+from typing import Union
+import psycopg2
+from PIL import Image
+import io
 
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
@@ -35,9 +39,12 @@ app = FastAPI(
 
 @app.on_event("startup")
 async def startup_event(db: Session = SessionLocal()):
-    Base.metadata.create_all(bind=engine)    
-    cruds.create_list_school(db)
-    cruds.create_list_user(db)
+    Base.metadata.create_all(bind=engine)
+    data_user = json.loads(open('json_db/users.json').read())
+    data_school = json.loads(open('json_db/schools.json').read())
+    #print(len(data_user))
+    cruds.create_list_user(db,data_user)
+    cruds.create_list_school(db,data_school)
     
 
 @app.get("/date")
@@ -81,7 +88,7 @@ async def login(request: OAuth2PasswordRequestForm = Depends(), db: Session = De
 
 
 
-@app.get("/list_user")
+@app.get("/list_user.json")
 def get_list_ids(db: Session= Depends(get_db)):
     return cruds.get_list_user(db)
 
@@ -105,6 +112,8 @@ async def get_current_user(db: Session = Depends(get_db), token: str = Depends(o
     return user
 
 async def get_current_active_user(current_user: schemas.UserBase = Depends(get_current_user)):
+    print(current_user.username)
+    current_user.id=str(current_user.id)
     if not current_user:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
@@ -127,9 +136,95 @@ def get_post(post_id: int,db: Session= Depends(get_db)):
 def get_post(cat_id: str,db: Session= Depends(get_db)):
     return cruds.get_posts_by_category(db,cat=cat_id)
 
-@app.post("/posts", response_model=schemas.Post)
-def create_post(post: schemas.Post, db: Session = Depends(get_db)):
-    return cruds.create_post(db=db, post=post)
+@app.post("/posts")#, response_model=schemas.Post)
+def create_post(post: schemas.Post,db: Session = Depends(get_db), file: UploadFile=File(...)):
+    print(post)
+    try:        
+        im = Image.open(file.file)
+        if im.mode in ("RGBA", "P"): 
+            im = im.convert("RGB")
+        buf = io.BytesIO()
+        im.save(buf, 'JPEG', quality=50)
+        # to get the entire bytes of the buffer use:
+        contents = buf.getvalue()
+        enc_data = base64.b64encode(contents)
+        # or, to read from `buf` (which is a file-like object), call this first:
+        buf.seek(0)  # to rewind the cursor to the start of the buffer
+    except Exception:
+        print('marche pas')
+    val = {"jpeg":enc_data}
+
+    # Serializing json  
+    json_object = json.dumps(val) 
+
+    # if file.content_type not in ["image/jpeg", "image/png"]:
+    #     raise HTTPException(400, detail="Invalid document type")
+    # # print(type(file))
+    # try:        
+    #     im = Image.open(file.file)
+    #     if im.mode in ("RGBA", "P"): 
+    #         im = im.convert("RGB")
+    #     buf = io.BytesIO()
+    #     im.save(buf, 'JPEG', quality=50)
+    #     # to get the entire bytes of the buffer use:
+    #     contents = buf.getvalue()
+    #     enc_data = base64.b64encode(contents)
+    #     # or, to read from `buf` (which is a file-like object), call this first:
+    #     buf.seek(0)  # to rewind the cursor to the start of the buffer
+    # except Exception:
+    #     print('marche pas')
+    # print(type(enc_data))
+    post.jpeg = json_object
+    return cruds.create_post(db,post)
+
+@app.post("/uploadfile")
+def create_upload_file(file: UploadFile=File(...)):
+    #print(type(file))
+    try:        
+        im = Image.open(file.file)
+        if im.mode in ("RGBA", "P"): 
+            im = im.convert("RGB")
+        buf = io.BytesIO()
+        im.save(buf, 'JPEG', quality=50)
+        # to get the entire bytes of the buffer use:
+        contents = buf.getvalue()
+        enc_data = base64.b64encode(contents)
+        # or, to read from `buf` (which is a file-like object), call this first:
+        buf.seek(0)  # to rewind the cursor to the start of the buffer
+    except Exception:
+        print('marche pas')
+#     if file.content_type not in ["image/jpeg", "image/png"]:
+#         raise HTTPException(400, detail="Invalid document type")
+    # import base64
+    #print(enc_data)
+  
+    # with open(file, "rb") as image2string:
+    #     converted_string = base64.b64encode(image2string.read())
+    # print(converted_string)
+    
+    # with open('encode.bin', "wb") as file:
+    #     file.write(converted_string)
+    #     print(type(file.file.read()))
+    # try:
+    #     #with open(file, 'rb') as f:   
+    #     img_data = file.file.read()
+    #         #f.close()
+    #     enc_data = base64.b64encode(img_data)
+    # except:
+    #     print("marche pas")
+    # print(str(enc_data))
+#     cruds.create_post()
+    #json.dump({'image':enc_data}, open('c:/out.json', 'w'))
+#https://github.com/tiangolo/fastapi/issues/3364
+#https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+    return enc_data
+
+# @app.post("/uploadfile/",response_model=schemas.Post)
+# async def create_upload_file(file: Union[UploadFile, None] = None):
+#     if not file:
+#         return {"message": "No upload file sent"}
+#     else:
+#         return {"filename": file.filename}
 
 @app.get('/usersbyschool')
 def get_users_by_school(school_id: str, db: Session= Depends(get_db)):

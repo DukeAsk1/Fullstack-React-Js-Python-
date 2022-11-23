@@ -121,7 +121,6 @@ async def get_current_user(db: Session = Depends(get_db), token: str = Depends(o
     return user
 
 async def get_current_active_user(current_user: schemas.UserBase = Depends(get_current_user)):
-    print(current_user.username)
     current_user.id=str(current_user.id)
     if not current_user:
         raise HTTPException(status_code=400, detail="Inactive user")
@@ -147,7 +146,6 @@ def get_post(cat_id: str,db: Session= Depends(get_db)):
 
 @app.post("/create_post")#, response_model = schemas.Post)
 def create_post(post: schemas.Post, current_user: schemas.UserBase = Depends(get_current_active_user), db: Session = Depends(get_db)):
-    print(current_user)
     return cruds.create_post(db,post,current_user.id)
 
 @app.post("/add_image")
@@ -183,6 +181,14 @@ def create_upload_file(file: UploadFile=File(...)):
     except Exception:
         print('marche pas')
     return enc_data
+
+@app.post("/users/{seller_id}/create_comment")
+def create_comment(comment: schemas.Comment, seller_id: str, current_user: schemas.UserBase = Depends(get_current_active_user), db: Session = Depends(get_db)):
+    return cruds.create_comment(db=db, comment=comment, buyer_id=current_user.id, seller_id=seller_id)
+
+@app.get('/users/{seller_id}/comments')
+def get_comments_by_seller(seller_id: str, db: Session= Depends(get_db)):
+    return cruds.get_comments_by_seller(db, seller_id)
 
 @app.get('/usersbyschool')
 def get_users_by_school(school_id: str, db: Session= Depends(get_db)):

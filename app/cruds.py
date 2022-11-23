@@ -99,8 +99,9 @@ def create_access_token(data: dict):
 
 # POST
 
-def create_post(db: Session,post: schemas.Post):
+def create_post(db: Session,post: schemas.Post, id:str):
     db_post = models.Post(**post.dict())
+    db_post.seller_id = id
     db.add(db_post)
     db.commit()
     db.refresh(db_post)

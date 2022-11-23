@@ -145,9 +145,10 @@ def get_post(post_id: int,db: Session= Depends(get_db)):
 def get_post(cat_id: str,db: Session= Depends(get_db)):
     return cruds.get_posts_by_category(db,cat=cat_id)
 
-@app.post("/create_post", response_model = schemas.Post)
-def create_post(post: schemas.Post, db: Session = Depends(get_db)):
-    return cruds.create_post(db,post)
+@app.post("/create_post")#, response_model = schemas.Post)
+def create_post(post: schemas.Post, current_user: schemas.UserBase = Depends(get_current_active_user), db: Session = Depends(get_db)):
+    print(current_user)
+    return cruds.create_post(db,post,current_user.id)
 
 @app.post("/add_image")
 def add_image(id: str, file: UploadFile=File(...), db: Session = Depends(get_db)):

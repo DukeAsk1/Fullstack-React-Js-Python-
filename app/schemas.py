@@ -65,7 +65,7 @@ class Post(BaseModel):
     category : Optional[str]
     jpeg : Optional[str]
     description: Optional[str]
-    #seller_id : Annotated[str, Field(default_factory=lambda: uuid4().hex)]
+    seller_id : Annotated[str, Field(default_factory=lambda: uuid4().hex)]
     #price: float
     created_at: Annotated[datetime, Field(default_factory=lambda: datetime.now())]
 

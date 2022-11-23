@@ -37,6 +37,14 @@ app = FastAPI(
     version="0.0.1",
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[""],
+    allow_credentials=True,
+    allow_methods=["POST", "GET"],
+    allow_headers=[""],
+)
+
 @app.on_event("startup")
 async def startup_event(db: Session = SessionLocal()):
     Base.metadata.create_all(bind=engine)

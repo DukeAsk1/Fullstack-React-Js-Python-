@@ -19,6 +19,7 @@ class User(Base):
     postal_code = (Column(Integer))
     description = Column(String)
     created_at = Column(DateTime())
+
     school = relationship("School")
 
 
@@ -41,11 +42,13 @@ class Comment(Base):
     rating = Column(Integer)
     created_at = Column(DateTime())
 
+    buyer = relationship("User")
+
 
 class Post(Base):
     __tablename__ = "Post"
     id = Column(UUID(as_uuid=True), primary_key=True, index=True)
-    #seller_id = Column(UUID(as_uuid=True), ForeignKey("User.id"))
+    seller_id = Column(UUID(as_uuid=True), ForeignKey("User.id"))
     title = Column(String)
     category = Column(String) #Valeurs fixées, style checkbox
     jpeg = Column(String)
@@ -53,4 +56,4 @@ class Post(Base):
     price = Column(Float)
     created_at = Column(DateTime())
 
-    #seller = relationship("User")
+    seller = relationship("User")

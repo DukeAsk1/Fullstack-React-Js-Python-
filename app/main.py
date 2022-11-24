@@ -1,6 +1,8 @@
 from fastapi import FastAPI, Depends,Header, Request, HTTPException, status, UploadFile,File
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
 from typing import Optional
 from datetime import datetime
 from datetime import datetime
@@ -54,9 +56,13 @@ async def startup_event(db: Session = SessionLocal()):
     Base.metadata.create_all(bind=engine)
     data_user = json.loads(open('json_db/users.json').read())
     data_school = json.loads(open('json_db/schools.json').read())
+    data_post = json.loads(open('json_db/posts.json').read())
     #print(len(data_user))
-    cruds.create_list_user(db,data_user)
     cruds.create_list_school(db,data_school)
+    cruds.create_list_user(db,data_user)
+    cruds.create_list_posts(db,data_post)
+
+    
     
 
 @app.get("/date")
@@ -140,9 +146,7 @@ async def read_users_me(current_user: schemas.UserBase = Depends(get_current_act
 def get_posts(db: Session= Depends(get_db)):
     return cruds.get_posts(db)
 
-@app.get('/posts/{post_id}', response_model=schemas.Post)
-def get_post(post_id: int,db: Session= Depends(get_db)):
-    return cruds.get_post_by_id(db,user_id=post_id)
+
 
 @app.get('/posts/{cat_id}', response_model=schemas.Post)
 def get_post(cat_id: str,db: Session= Depends(get_db)):
@@ -168,9 +172,36 @@ def add_image(id: str, file: UploadFile=File(...), db: Session = Depends(get_db)
         buf.seek(0)  # to rewind the cursor to the start of the buffer
     except Exception:
         print('marche pas')
-    return cruds.add_image(db=db, data=enc_data, id=id)
+    val = {"jpeg":str(enc_data)}
+    return cruds.add_image(db=db, data=val, id=id)
 
-@app.post("/uploadfile")
+@app.get('/get_post', response_model=schemas.Post)
+def get_post(post_id: str,db: Session= Depends(get_db)):
+    return cruds.get_post_by_id(db,post_id)
+
+@app.get("/get_Image")
+def get_post_image(post_id: str, db: Session = Depends(get_db)):
+    img_data = cruds.get_post_image(db,post_id)
+    img_enc = img_data['jpeg']
+    #print(type(img_enc))
+    img_enc = img_enc[2: ]
+    img_enc = img_enc[:-1 ]
+    #print(img_enc)
+    img_dec = str(base64.b64decode(img_enc))
+    #print(img_dec[:100])
+    decodeit = open('hello_level.jpeg', 'wb')
+    decodeit.write(base64.b64decode((img_enc)))
+    decodeit.close()
+    img_dec = img_dec[2: ]
+    img_dec = img_dec[:-1 ]
+    #print(img_dec[:100])
+    #json_compatible_item_data = jsonable_encoder(img_dec)
+
+
+    return JSONResponse(content=img_dec)
+
+
+@app.post("/uploadImage")
 def create_upload_file(file: UploadFile=File(...)):
     try:        
         im = Image.open(file.file)
@@ -187,6 +218,14 @@ def create_upload_file(file: UploadFile=File(...)):
         print('marche pas')
     return enc_data
 
+
+
 @app.get('/usersbyschool')
 def get_users_by_school(school_id: str, db: Session= Depends(get_db)):
     return cruds.get_users_by_school(db, school_id)
+
+# implémenter les écoles puis les users.
+
+# remplir des jsons de référence pour le post et le comment
+
+# obtenir l'image du post et sa description

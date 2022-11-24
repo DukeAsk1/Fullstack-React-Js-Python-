@@ -7,8 +7,8 @@ from database import Base
 class User(Base):
     __tablename__ = "User"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, index=True)
-    school_id = Column(UUID(as_uuid=True), ForeignKey("School.id"))
+    id = Column(String, primary_key=True, index=True)
+    school_id = Column(String, ForeignKey("School.id"))
     firstname = Column(String)
     lastname = Column(String)
     username = Column(String)
@@ -25,7 +25,7 @@ class User(Base):
 
 class School(Base):
     __tablename__ = "School"
-    id = Column(UUID(as_uuid=True), primary_key=True, index=True)
+    id = Column(String, primary_key=True, index=True)
     name = Column(String)
     address = Column(String)
     description = Column(String)
@@ -47,13 +47,13 @@ class Comment(Base):
 
 class Post(Base):
     __tablename__ = "Post"
-    id = Column(UUID(as_uuid=True), primary_key=True, index=True)
-    seller_id = Column(UUID(as_uuid=True), ForeignKey("User.id"))
+    id = Column(String, primary_key=True, index=True)
+    seller_id = Column(String, ForeignKey("User.id"))
     title = Column(String)
     category = Column(String) #Valeurs fixées, style checkbox
     jpeg = Column(String)
     description = Column(String)
-    #price = Column(Float)
+    price = Column(Float)
     created_at = Column(DateTime())
 
     seller = relationship("User")

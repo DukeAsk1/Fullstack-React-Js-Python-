@@ -1,3 +1,7 @@
+html {
+  height: 100%;
+  width: 100%;
+}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -142,4 +146,82 @@ ReadMore {
 .text-link {
   color: inherit;
   text-decoration: inherit;
+}
+
+/* LOGINREGISTER */
+.loginregister-container {
+  height: 100vh;
+  width: 100vw;
+  background: whitesmoke;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.square {
+  background-color: grey;
+  box-sizing: border-box;
+  border-radius: 60px;
+  height: 80%;
+  width: 67%;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-evenly;
+}
+
+.loginregister-left {
+  background-color: blue;
+  border-radius: 60px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-evenly;
+  flex-grow: 1;
+
+  margin: 1rem 1rem;
+
+  text-justify: auto;
+}
+
+.loginregister-left .top {
+  background-color: red;
+  flex: 1;
+  margin: 1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loginregister-left .middle {
+  background-color: yellow;
+  flex: 1;
+  margin: 1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loginregister-left .bottom {
+  background-color: green;
+  flex: 1;
+  margin: 1rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loginregister-right {
+  background-color: green;
+  border-radius: 60px;
+
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+
+  margin: 1rem 1rem;
 }

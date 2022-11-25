@@ -32,7 +32,7 @@ const Main = () => {
             <h4>Déposer une annonce</h4>
           </button>
           <button className="btn">
-            <Link to="../User/User" className="text-link">
+            <Link to="User/User" className="text-link">
               <h4>Mon Profil</h4>
             </Link>
           </button>

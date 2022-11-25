@@ -38,7 +38,8 @@ const Annonce = ({ annonce }) => {
 
           <section className="right">
             <div className="topper">
-              <h3>{title}</h3>
+              <h2>{title}</h2>
+              <h3>Publié par : owner</h3>
             </div>
             <div className="subtopper">
               <h4>Prix : {price}€</h4>

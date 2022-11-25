@@ -27,6 +27,12 @@ h4 {
   margin-bottom: 0.75rem;
 }
 
+img {
+  width: 400px;
+  height: 400px;
+  object-fit: cover;
+}
+
 .Main-Container {
   box-shadow: rgba(50, 50, 93, 0.25) 0px 0px 15px 0px,
     rgba(0, 0, 0, 0.1) 0px 8px 8px -8px;
@@ -108,6 +114,8 @@ h4 {
   border-color: black;
   border-width: 2px;
   border: 1px solid black;
+
+  max-width: 80vw;
 }
 
 .annonce .bottom {
@@ -118,6 +126,7 @@ h4 {
 
 .annonce .bottom .right .topper {
   display: flex;
+  flex-direction: column;
   text-align: center;
   justify-content: space-around;
   margin: 0;
@@ -125,6 +134,11 @@ h4 {
 
 .annonce .bottom .right .topper h3 {
   margin: 7px;
+  font-weight: 400;
+}
+
+.annonce .bottom .right .topper h2 {
+  margin: 0px;
 }
 
 .annonce .bottom .right .subtopper {
@@ -149,15 +163,14 @@ h4 {
 }
 
 .annonce img {
-  width: 300px;
-  height: 300px;
+  width: 250px;
+  height: 250px;
   object-fit: cover;
 }
 
 ReadMore {
   display: flex;
   flex-direction: row;
-  background-color: black;
 }
 
 .read-or-hide {
@@ -173,12 +186,18 @@ ReadMore {
 .textreadmore {
   text-align: justify;
   text-justify: inter-word;
+  font-size: 0.9rem;
+  font-weight: 350;
   transition: all 0.2s ease-in-out;
 }
 
 .textreadmore-readmore {
   text-align: justify;
   text-justify: inter-word;
+  text-align: justify;
+  text-justify: inter-word;
+  font-size: 0.9rem;
+  font-weight: 350;
 }
 
 .read-or-hide:hover {
@@ -201,7 +220,6 @@ ReadMore {
 
 .loginregister-container {
   flex-grow: 1;
-  background: whitesmoke;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -360,8 +378,117 @@ ReadMore {
   border-bottom-right-radius: 0;
   letter-spacing: 0.2px;
   outline: 0;
+
+  transition: all 0.1s ease-in-out;
 }
 
 .SignContainer .bottom button:hover {
   background-color: orange;
+
+  transform: scale(1.05, 1.05);
 }
+
+/** User **/
+.mainuserpage-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+
+  background-color: whitesmoke;
+}
+
+.mainuser-container {
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ficheutilisateur-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+}
+
+.ficheutilisateur-container .ficheuser {
+  display: flex;
+  align-items: stretch;
+
+  box-sizing: border-box;
+  border-radius: 20px;
+  height: 80%;
+  width: 67%;
+  margin-top: 40px;
+
+  box-shadow: rgba(0, 0, 0, 0.301) 0px 0px 10px 1px,
+    rgba(0, 0, 0, 0.11) 0px 0px 5px 1px;
+
+  padding: 20px;
+}
+
+.ficheuser .leftside {
+  flex-grow: 1;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ficheuser .rightside {
+  flex-grow: 6;
+  margin: 10px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ficheuser .rightside .left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+}
+
+.ficheuser .rightside .right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+}
+
+.ficheutilisateur-container img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
+
+.annoncesutilisateur-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* **** */
+
+/* Product page */
+.mainproduct-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  width: 100vw;
+}
+
+.PageProduit-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+/* *** */

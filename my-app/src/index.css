@@ -3,6 +3,7 @@ html {
   width: 100%;
 }
 body {
+  height: 100%;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
@@ -82,11 +83,19 @@ h4 {
   align-items: center;
 }
 
+.annonce-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+}
+
 .listeannonces {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   justify-content: center;
-  width: 90%;
+  align-items: center;
+  width: 70%;
 }
 
 .annonce {
@@ -99,12 +108,35 @@ h4 {
   border-color: black;
   border-width: 2px;
   border: 1px solid black;
-  max-width: 600px;
 }
 
 .annonce .bottom {
   display: flex;
+  gap: 30px;
   margin: 10px;
+}
+
+.annonce .bottom .right .topper {
+  display: flex;
+  text-align: center;
+  justify-content: space-around;
+  margin: 0;
+}
+
+.annonce .bottom .right .topper h3 {
+  margin: 7px;
+}
+
+.annonce .bottom .right .subtopper {
+  display: flex;
+  text-align: center;
+  justify-content: space-around;
+}
+
+.annonce .bottom .right .subtopper h4 {
+  margin-top: 5px;
+  margin-bottom: auto;
+  font-weight: 350;
 }
 
 .annonce:hover {
@@ -138,6 +170,17 @@ ReadMore {
   text-justify: auto;
 }
 
+.textreadmore {
+  text-align: justify;
+  text-justify: inter-word;
+  transition: all 0.2s ease-in-out;
+}
+
+.textreadmore-readmore {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
 .read-or-hide:hover {
   background-color: yellow;
   transform: scale(1.15, 1.15);
@@ -149,9 +192,15 @@ ReadMore {
 }
 
 /* LOGINREGISTER */
-.loginregister-container {
+.mainloginregistercontainer {
+  display: flex;
+  flex-direction: column;
   height: 100vh;
-  width: 100vw;
+  width: 100%;
+}
+
+.loginregister-container {
+  flex-grow: 1;
   background: whitesmoke;
   display: flex;
   align-items: center;
@@ -159,69 +208,160 @@ ReadMore {
 }
 
 .square {
-  background-color: grey;
+  background-color: orange;
   box-sizing: border-box;
   border-radius: 60px;
   height: 80%;
   width: 67%;
+
   display: flex;
   align-items: stretch;
   justify-content: space-evenly;
+
+  box-shadow: rgba(0, 0, 0, 0.301) 0px 0px 20px 1px,
+    rgba(0, 0, 0, 0.11) 0px 0px 30px 1px;
 }
 
 .loginregister-left {
-  background-color: blue;
+  background-color: white;
   border-radius: 60px;
+
+  flex: 3;
 
   display: flex;
   flex-direction: column;
   align-items: stretch;
   justify-content: space-evenly;
-  flex-grow: 1;
-
   margin: 1rem 1rem;
 
   text-justify: auto;
+
+  font-size: 20px;
 }
 
 .loginregister-left .top {
-  background-color: red;
-  flex: 1;
   margin: 1rem;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  font-size: 40px;
+  font-weight: 400;
+}
+
+.loginregister-left .top p {
+  margin: 0;
 }
 
 .loginregister-left .middle {
-  background-color: yellow;
   flex: 1;
-  margin: 1rem;
+  margin: 4rem;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  font-size: 23px;
+  font-weight: 300;
+}
+
+.loginregister-left .middle p {
+  overflow-wrap: anywhere;
+  text-align: justify;
+  text-justify: inter-word;
 }
 
 .loginregister-left .bottom {
-  background-color: green;
-  flex: 1;
-  margin: 1rem;
+  margin: 0;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  font-size: 15px;
 }
 
 .loginregister-right {
-  background-color: green;
+  background-color: white;
   border-radius: 60px;
 
   display: flex;
-  flex-grow: 1;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  flex-grow: 1;
 
   margin: 1rem 1rem;
+}
+
+/* LoginPart */
+.SignContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: stretch;
+
+  width: 100%;
+  height: 100%;
+
+  text-align: center;
+}
+
+.SignContainer .top {
+}
+
+.SignContainer .top h3 {
+  font-size: 30px;
+  font: bold;
+  font-weight: 550;
+}
+
+.SignContainer .middle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.SignContainer .middle .inputfields-container input {
+  font-size: 16px;
+  display: block;
+  font-family: "Rubik", sans-serif;
+  width: 300px;
+  padding: 10px 1px;
+  border: 0;
+  border-bottom: 1px solid #747474;
+  outline: none;
+  margin-top: 10px;
+}
+
+.SignContainer .middle .inputfields-container {
+  padding: 3px;
+}
+
+.SignContainer .bottom {
+}
+
+.SignContainer .bottom .button-action {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.SignContainer .bottom button {
+  width: 30%;
+  border: none;
+  padding: 18px;
+  cursor: pointer;
+  text-transform: uppercase;
+  background: #e8e9ec;
+  color: #777;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 0;
+  letter-spacing: 0.2px;
+  outline: 0;
+}
+
+.SignContainer .bottom button:hover {
+  background-color: orange;
 }

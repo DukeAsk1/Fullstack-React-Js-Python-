@@ -10,7 +10,7 @@ const Annonces = () => {
     const result = data.map((annonce, index) => {
       return (
         <>
-          <Link to={`../Product/Product/${index}`} className="text-link">
+          <Link className="text-link">
             <Annonce annonce={annonce} />
           </Link>
         </>
@@ -26,7 +26,9 @@ const Annonces = () => {
   return (
     <>
       <section className="annoncesection">
-        <div className="listeannonces">{annonces}</div>
+        <div className="annonce-container">
+          <div className="listeannonces">{annonces}</div>
+        </div>
       </section>
     </>
   );

@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "name": "Habit"
+    },
+    {
+        "id": 2,
+        "name": "Musique"
+    },
+    {
+        "id": 3,
+        "name": "High-Tech"
+    },
+    {
+        "id": 4,
+        "name": "Automobile"
+    },
+    {
+        "id": 5,
+        "name": "Chaussure"
+    },
+    {
+        "id": 6,
+        "name": "Sport"
+    }
+]

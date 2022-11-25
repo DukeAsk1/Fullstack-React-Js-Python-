@@ -3,6 +3,8 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.responses import StreamingResponse
 from typing import Optional
 from datetime import datetime
 from datetime import datetime
@@ -19,7 +21,7 @@ from typing import Union
 import psycopg2
 from PIL import Image
 import io
-from fastapi.middleware.cors import CORSMiddleware
+
 
 
 
@@ -56,10 +58,12 @@ async def startup_event(db: Session = SessionLocal()):
     Base.metadata.create_all(bind=engine)
     data_user = json.loads(open('json_db/users.json').read())
     data_school = json.loads(open('json_db/schools.json').read())
-    data_post = json.loads(open('json_db/posts.json').read())
+    data_category = json.loads(open('json_db/categories.json').read())
+    data_post = json.loads(open('json_db/posts.json').read())    
     #print(len(data_user))
     cruds.create_list_school(db,data_school)
     cruds.create_list_user(db,data_user)
+    cruds.create_list_category(db,data_category)
     cruds.create_list_posts(db,data_post)
 
     
@@ -74,6 +78,8 @@ async def update_date():
 def read_root():
     return {"Hello": "World"}
 
+# SCHOOL
+
 @app.put("/create_school", response_model=schemas.School)
 async def create(school: schemas.School, db: Session = Depends(get_db)):
     return cruds.create_school(db,school)
@@ -82,6 +88,8 @@ async def create(school: schemas.School, db: Session = Depends(get_db)):
 def get_list_ids(db: Session= Depends(get_db)):
     return cruds.get_list_school(db)
 
+# USER
+
 @app.post("/users", response_model=schemas.UserCreate)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = cruds.get_user_by_email(db, email=user.email)
@@ -89,6 +97,24 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Email already registered")
     return cruds.create_user(db=db, user=user)
 
+@app.get("/list_user")
+def get_list_ids(db: Session= Depends(get_db)):
+    return cruds.get_list_user(db)
+
+@app.get('/usersbyschool')
+def get_users_by_school(school_id: str, db: Session= Depends(get_db)):
+    return cruds.get_users_by_school(db, school_id)
+
+
+# CATEGORY
+
+@app.get("/list_category")
+def get_list_category(db: Session= Depends(get_db)):
+    return cruds.get_all_category(db)
+
+
+
+# LOGIN
 
 @app.post("/login", response_model=schemas.Token)
 async def login(request: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
@@ -103,12 +129,6 @@ async def login(request: OAuth2PasswordRequestForm = Depends(), db: Session = De
     access_token = cruds.create_access_token(data={"sub": user.username})
 
     return {"access_token": access_token, "token_type": "bearer"}
-
-
-
-@app.get("/list_user")
-def get_list_ids(db: Session= Depends(get_db)):
-    return cruds.get_list_user(db)
 
 async def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):# -> models.User:
     credentials_exception = HTTPException(
@@ -141,12 +161,12 @@ async def get_current_active_user(current_user: schemas.UserBase = Depends(get_c
 async def read_users_me(current_user: schemas.UserBase = Depends(get_current_active_user)):
     return current_user
 
+# POST
+
 
 @app.get('/posts')
 def get_posts(db: Session= Depends(get_db)):
     return cruds.get_posts(db)
-
-
 
 @app.get('/posts/{cat_id}', response_model=schemas.Post)
 def get_post(cat_id: str,db: Session= Depends(get_db)):
@@ -196,9 +216,8 @@ def get_post_image(post_id: str, db: Session = Depends(get_db)):
     img_dec = img_dec[:-1 ]
     #print(img_dec[:100])
     #json_compatible_item_data = jsonable_encoder(img_dec)
-
-
-    return JSONResponse(content=img_dec)
+    return JSONResponse(content=img_dec,media_type="image/jpg")
+    #return StreamingResponse(img_dec, media_type="image/jpg")
 
 
 @app.post("/uploadImage")
@@ -220,11 +239,7 @@ def create_upload_file(file: UploadFile=File(...)):
 
 
 
-@app.get('/usersbyschool')
-def get_users_by_school(school_id: str, db: Session= Depends(get_db)):
-    return cruds.get_users_by_school(db, school_id)
 
-# implémenter les écoles puis les users.
 
 # remplir des jsons de référence pour le post et le comment
 

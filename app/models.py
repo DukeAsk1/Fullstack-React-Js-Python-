@@ -7,7 +7,7 @@ from database import Base
 class User(Base):
     __tablename__ = "User"
 
-    id = Column(String, primary_key=True, index=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True)
     school_id = Column(String, ForeignKey("School.id"))
     firstname = Column(String)
     lastname = Column(String)
@@ -31,26 +31,32 @@ class School(Base):
     description = Column(String)
     created_at = Column(DateTime())
 
+class Category(Base):
+    __tablename__ = "Category"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+
 
 class Comment(Base):
     __tablename__ = "Comment"
     id = Column(UUID(as_uuid=True), primary_key=True, index=True)
-    #buyer_id = Column(UUID(as_uuid=True), ForeignKey("User.id"))
-
+    buyer_id = Column(UUID(as_uuid=True), ForeignKey("User.id"))
+    seller_id = Column(UUID(as_uuid=True), ForeignKey("User.id"))
     content = Column(String)
     rating = Column(Integer)
     created_at = Column(DateTime())
 
-    #buyer = relationship("User")
-    #seller = relationship("User")
+    buyer = relationship("User", foreign_keys=[buyer_id])
+    seller = relationship("User", foreign_keys=[seller_id])
+
 
 
 class Post(Base):
     __tablename__ = "Post"
-    id = Column(String, primary_key=True, index=True)
-    seller_id = Column(String, ForeignKey("User.id"))
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True)
+    seller_id = Column(UUID(as_uuid=True), ForeignKey("User.id"))
     title = Column(String)
-    category = Column(String) #Valeurs fixées, style checkbox
+    category = Column(Integer, ForeignKey("Category.id")) #Valeurs fixées, style checkbox
     jpeg = Column(String)
     description = Column(String)
     price = Column(Float)

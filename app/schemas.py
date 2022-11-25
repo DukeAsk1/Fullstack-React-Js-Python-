@@ -48,6 +48,13 @@ class School(BaseModel):
     class Config:
         orm_mode = True
 
+class Category(BaseModel):
+    id: int
+    name: str
+
+    class Config:
+        orm_mode = True
+
 
 class Comment(BaseModel):
     id: Annotated[str, Field(default_factory=lambda: uuid4().hex)]

@@ -44,23 +44,7 @@ def create_list_school(db: Session,list_school):
         db.refresh(school1)
         school1.id = str(school1.id)
 
-# LOGIN
-
-def verify_password(plain_password, base_password):
-    if plain_password != base_password:
-        return False
-    else:
-        return True
-
-def authentificate_user(db: Session, username: str, pass_word: str):
-    user = get_user(db, username)
-    if not user:
-        return False
-    if pass_word != user.password:
-        return False
-    return user
-
-
+# USER
 
 def create_user(db: Session, user: schemas.UserCreate):
     #fake_hashed_password = user.password + "notreallyhashed"
@@ -86,8 +70,37 @@ def create_list_user(db: Session,list_user):
         db.add(db_user)
         db.commit()
         db.refresh(db_user)
-        #db_user.id = str(db_user.id)
+        #db_user.id = str(db_user.id)        
 
+
+
+# CATEGORY
+        
+def create_list_category(db: Session,list_category):
+    for i in list_category:
+        db_category = models.Category(**i)
+        db.add(db_category)
+        db.commit()
+        db.refresh(db_category)
+
+def get_all_category(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Category).offset(skip).limit(limit).all()
+
+# LOGIN
+
+def verify_password(plain_password, base_password):
+    if plain_password != base_password:
+        return False
+    else:
+        return True
+
+def authentificate_user(db: Session, username: str, pass_word: str):
+    user = get_user(db, username)
+    if not user:
+        return False
+    if pass_word != user.password:
+        return False
+    return user
 
 
 def create_access_token(data: dict):
@@ -137,12 +150,12 @@ def get_posts(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Post).offset(skip).limit(limit).all()
 
 
-# Fixer des valeurs dans le form des posts
-# Codes par lettres: H (Habits) V (Véhicule) M (Musique) S (Sport)  
-
 
 def get_posts_by_category(db: Session, cat: str, skip: int = 0, limit: int = 100):
     return db.query(models.Post).filter(models.Post.category == cat).offset(skip).limit(limit).all()
+
+
+
 
 # COMMENT
 

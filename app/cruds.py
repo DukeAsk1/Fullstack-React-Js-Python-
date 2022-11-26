@@ -7,6 +7,7 @@ import uuid
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
+import numpy as np
 
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
@@ -192,7 +193,8 @@ def get_comment(db: Session, user_id: int):
 def get_comments_by_seller(db: Session, seller_id: str):
     return db.query(models.Comment).filter(models.Comment.seller_id == seller_id).all()
 
-
+def get_rating(db:Session, seller_id: str):
+    return np.mean(db.query(models.Comment.rating).filter(models.Comment.seller_id == seller_id).all())
 
 
 

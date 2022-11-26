@@ -267,6 +267,10 @@ def get_comments_by_seller(seller_id: str, db: Session= Depends(get_db)):
 def get_comments_by_seller(seller_id: str, db: Session= Depends(get_db)):
     return cruds.get_comments_by_seller(db, seller_id)
 
+@app.get('/users/{seller_id}/rating')
+def get_rating(seller_id: str, db: Session= Depends(get_db)):
+    return cruds.get_rating(db, seller_id)
+
 
 # remplir des jsons de référence pour le post et le comment
 

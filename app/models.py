@@ -8,7 +8,7 @@ class User(Base):
     __tablename__ = "User"
 
     id = Column(UUID(as_uuid=True), primary_key=True, index=True)
-    school_id = Column(UUID(as_uuid=True), ForeignKey("School.id"))
+    school_id = Column(String, ForeignKey("School.id"))
     firstname = Column(String)
     lastname = Column(String)
     username = Column(String)
@@ -25,11 +25,16 @@ class User(Base):
 
 class School(Base):
     __tablename__ = "School"
-    id = Column(UUID(as_uuid=True), primary_key=True, index=True)
+    id = Column(String, primary_key=True, index=True)
     name = Column(String)
     address = Column(String)
     description = Column(String)
     created_at = Column(DateTime())
+
+class Category(Base):
+    __tablename__ = "Category"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
 
 
 class Comment(Base):
@@ -50,10 +55,11 @@ class Post(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, index=True)
     seller_id = Column(UUID(as_uuid=True), ForeignKey("User.id"))
     title = Column(String)
-    category = Column(String) #Valeurs fixées, style checkbox
+    category = Column(Integer, ForeignKey("Category.id")) #Valeurs fixées, style checkbox
     jpeg = Column(String)
     description = Column(String)
     price = Column(Float)
     created_at = Column(DateTime())
 
     seller = relationship("User")
+    category_id = relationship("Category")

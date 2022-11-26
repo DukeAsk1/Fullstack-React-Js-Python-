@@ -1,5 +1,10 @@
 from fastapi import FastAPI, Depends,Header, Request, HTTPException, status, UploadFile,File
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.responses import StreamingResponse
 from typing import Optional
 from datetime import datetime
 from datetime import datetime
@@ -16,7 +21,9 @@ from typing import Union
 import psycopg2
 from PIL import Image
 import io
-from fastapi.middleware.cors import CORSMiddleware
+
+
+
 
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
@@ -51,9 +58,15 @@ async def startup_event(db: Session = SessionLocal()):
     Base.metadata.create_all(bind=engine)
     data_user = json.loads(open('json_db/users.json').read())
     data_school = json.loads(open('json_db/schools.json').read())
+    data_category = json.loads(open('json_db/categories.json').read())
+    data_post = json.loads(open('json_db/posts.json').read())    
     #print(len(data_user))
-    cruds.create_list_user(db,data_user)
     cruds.create_list_school(db,data_school)
+    cruds.create_list_user(db,data_user)
+    cruds.create_list_category(db,data_category)
+    cruds.create_list_posts(db,data_post)
+
+    
     
 
 @app.get("/date")
@@ -65,6 +78,8 @@ async def update_date():
 def read_root():
     return {"Hello": "World"}
 
+# SCHOOL
+
 @app.put("/create_school", response_model=schemas.School)
 async def create(school: schemas.School, db: Session = Depends(get_db)):
     return cruds.create_school(db,school)
@@ -73,6 +88,8 @@ async def create(school: schemas.School, db: Session = Depends(get_db)):
 def get_list_ids(db: Session= Depends(get_db)):
     return cruds.get_list_school(db)
 
+# USER
+
 @app.post("/users", response_model=schemas.UserCreate)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = cruds.get_user_by_email(db, email=user.email)
@@ -80,6 +97,24 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Email already registered")
     return cruds.create_user(db=db, user=user)
 
+@app.get("/list_user")
+def get_list_ids(db: Session= Depends(get_db)):
+    return cruds.get_list_user(db)
+
+@app.get('/usersbyschool')
+def get_users_by_school(school_id: str, db: Session= Depends(get_db)):
+    return cruds.get_users_by_school(db, school_id)
+
+
+# CATEGORY
+
+@app.get("/list_category")
+def get_list_category(db: Session= Depends(get_db)):
+    return cruds.get_all_category(db)
+
+
+
+# LOGIN
 
 @app.post("/login", response_model=schemas.Token)
 async def login(request: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
@@ -94,12 +129,6 @@ async def login(request: OAuth2PasswordRequestForm = Depends(), db: Session = De
     access_token = cruds.create_access_token(data={"sub": user.username})
 
     return {"access_token": access_token, "token_type": "bearer"}
-
-
-
-@app.get("/list_user")
-def get_list_ids(db: Session= Depends(get_db)):
-    return cruds.get_list_user(db)
 
 async def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):# -> models.User:
     credentials_exception = HTTPException(
@@ -131,21 +160,17 @@ async def get_current_active_user(current_user: schemas.UserBase = Depends(get_c
 async def read_users_me(current_user: schemas.UserBase = Depends(get_current_active_user)):
     return current_user
 
+# POST
+
 
 @app.get('/posts')
 def get_posts(db: Session= Depends(get_db)):
     return cruds.get_posts(db)
 
-@app.get('/posts/{post_id}', response_model=schemas.Post)
-def get_post(post_id: int,db: Session= Depends(get_db)):
-    return cruds.get_post_by_id(db,user_id=post_id)
-
-@app.get('/posts/{cat_id}', response_model=schemas.Post)
-def get_post(cat_id: str,db: Session= Depends(get_db)):
-    return cruds.get_posts_by_category(db,cat=cat_id)
-
 @app.post("/create_post")#, response_model = schemas.Post)
 def create_post(post: schemas.Post, current_user: schemas.UserBase = Depends(get_current_active_user), db: Session = Depends(get_db)):
+    id = cruds.get_category_id(db,post.category)
+    post.category = id
     return cruds.create_post(db,post,current_user.id)
 
 @app.post("/add_image")
@@ -163,9 +188,35 @@ def add_image(id: str, file: UploadFile=File(...), db: Session = Depends(get_db)
         buf.seek(0)  # to rewind the cursor to the start of the buffer
     except Exception:
         print('marche pas')
-    return cruds.add_image(db=db, data=enc_data, id=id)
+    val = {"jpeg":str(enc_data)}
+    return cruds.add_image(db=db, data=val, id=id)
 
-@app.post("/uploadfile")
+@app.get('/get_post', response_model=schemas.Post)
+def get_post(post_id: str,db: Session= Depends(get_db)):
+    return cruds.get_post_by_id(db,post_id)
+
+@app.get("/get_Image")
+def get_post_image(post_id: str, db: Session = Depends(get_db)):
+    img_data = cruds.get_post_image(db,post_id)
+    img_enc = img_data['jpeg']
+    #print(type(img_enc))
+    img_enc = img_enc[2: ]
+    img_enc = img_enc[:-1 ]
+    #print(img_enc)
+    img_dec = str(base64.b64decode(img_enc))
+    #print(img_dec[:100])
+    decodeit = open('hello_level.jpeg', 'wb')
+    decodeit.write(base64.b64decode((img_enc)))
+    decodeit.close()
+    img_dec = img_dec[2: ]
+    img_dec = img_dec[:-1 ]
+    #print(img_dec[:100])
+    #json_compatible_item_data = jsonable_encoder(img_dec)
+    return JSONResponse(content=img_dec,media_type="image/jpg")
+    #return StreamingResponse(img_dec, media_type="image/jpg")
+
+
+@app.post("/uploadImage")
 def create_upload_file(file: UploadFile=File(...)):
     try:        
         im = Image.open(file.file)

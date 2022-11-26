@@ -1,29 +1,52 @@
 [
-{"name": "ESIEE Paris",
-"address": "Cité Descartes, 2 Bd Blaise Pascal, 93160 Noisy-le-Grand",
-"description": "Ecole d'ingénieurs Electrotechnique"},
-{"name": "Ecoles des Mines de Paris",
-"address": "60 Bd Saint-Michel, 75272 Paris",
-"description": "Université PSL"},
-{"name": "Sorbonne Université",
-"address": "1 Rue Victor Cousin, 75005 Paris",
-"description": "Faculté des Lettres"},
-{"name": "ESILV",
-"address": "12 Av. Léonard de Vinci, 92400 Courbevoie",
-"description": "Ecole supérieur d'ingénieurs"},
-{"name": "Ecole Polytechnique",
-"address": "Rte de Saclay, 91120 Palaiseau",
-"description": "Établissement public national à caractère scientifique culturel et professionnel"},
-{"name": "ESSEC Business School",
+{
+    "id":"esie_93160",    
+    "name": "ESIEE Paris",
+    "address": "Cité Descartes, 2 Bd Blaise Pascal, 93160 Noisy-le-Grand",
+    "description": "Ecole d'ingénieurs Electrotechnique"
+},
+{
+    "id":"mine_75272",    
+    "name": "Ecoles des Mines de Paris",
+    "address": "60 Bd Saint-Michel, 75272 Paris",
+    "description": "Université PSL"
+},
+{
+    "id":"sorb_75005",    
+    "name": "Sorbonne Université",
+    "address": "1 Rue Victor Cousin, 75005 Paris",
+    "description": "Faculté des Lettres"
+},
+{
+    "id":"esil_92400",    
+    "name": "ESILV",
+    "address": "12 Av. Léonard de Vinci, 92400 Courbevoie",
+    "description": "Ecole supérieur d'ingénieurs"
+},
+{
+    "id":"poly_91120",    
+    "name": "Ecole Polytechnique",
+    "address": "Rte de Saclay, 91120 Palaiseau",
+    "description": "Établissement public national à caractère scientifique culturel et professionnel"
+},
+{
+    "id":"esse_95000",    
+    "name": "ESSEC Business School",
 "address": "3 Av. Bernard Hirsch, 95000 Cergy",
 "description": "Grande école de commerce et de gestion française"},
-{"name": "HEC Paris",
+{
+    "id":"hec_78350",    
+    "name": "HEC Paris",
 "address": "1 Rue de la Libération, 78350 Jouy-en-Josas",
 "description": "Grande école de commerce et de gestion publique consulaire"},
-{"name": "Efrei",
+{
+    "id":"efre_94800",    
+    "name": "Efrei",
 "address": "30 Av. de la République, 94800 Villejuif",
 "description": "École française d'électronique et d'informatique"},
-{"name": "Université Panthéon-Assas Paris II",
+{
+    "id":"assa_75506",
+    "name": "Université Panthéon-Assas Paris II",
 "address": "75006 Paris",
 "description": "Etablissement d'enseignement supérieur sous le statut d'établissement public expérimental"}
 ]

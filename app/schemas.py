@@ -17,7 +17,7 @@ class UserLogin(UserBase):
 
 class UserCreate(UserBase):
     id: Annotated[str, Field(default_factory=lambda: uuid4().hex)]
-    school_id: Optional[Annotated[str, Field(default_factory=lambda: uuid4().hex)]]
+    school_id: str
     firstname: str
     lastname: str
     email: str
@@ -39,11 +39,18 @@ class TokenData(BaseModel):
     
 
 class School(BaseModel):
-    id: Annotated[str, Field(default_factory=lambda: uuid4().hex)]
+    id: str
     name: str
     address: str
     description: Optional[str]
     created_at: Annotated[datetime, Field(default_factory=lambda: datetime.now())]
+
+    class Config:
+        orm_mode = True
+
+class Category(BaseModel):
+    id: int
+    name: str
 
     class Config:
         orm_mode = True
@@ -64,7 +71,7 @@ class Comment(BaseModel):
 class Post(BaseModel):
     id: Annotated[str, Field(default_factory=lambda: uuid4().hex)]
     title: str
-    category : Optional[str]
+    category : str
     jpeg : Optional[str]
     description: Optional[str]
     seller_id : Annotated[str, Field(default_factory=lambda: uuid4().hex)]
@@ -73,3 +80,5 @@ class Post(BaseModel):
 
     class Config:
         orm_mode = True
+
+

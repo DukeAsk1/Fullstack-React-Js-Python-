@@ -247,6 +247,11 @@ def create_comment(comment: schemas.Comment, seller_id: str, current_user: schem
 def get_comments_by_seller(seller_id: str, db: Session= Depends(get_db)):
     return cruds.get_comments_by_seller(db, seller_id)
 
+@app.get('/posts/{category}')
+def get_posts_by_category(category: str, db:Session = Depends(get_db)):
+    return cruds.get_posts_by_category(db,category)
+
+
 # COMMENT
 
 @app.get("/list_comment")

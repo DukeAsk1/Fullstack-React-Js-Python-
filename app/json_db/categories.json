@@ -1,38 +1,38 @@
 [
     {
-        "id": 1,
+        "id": "1d76d62b-ec32-40ef-9288-0b955a29d0af",
         "name": "Habit"
     },
     {
-        "id": 2,
+        "id": "5e87e2da-e980-438d-a6ce-72d5e98cfab9",
         "name": "Musique"
     },
     {
-        "id": 3,
+        "id": "5de78902-ccde-47cf-973b-e79635dadd15",
         "name": "High-Tech"
     },
     {
-        "id": 4,
+        "id": "0ac6c70b-789a-4cee-8ca9-b3a6f61822eb",
         "name": "Automobile"
     },
     {
-        "id": 5,
+        "id": "9cb1fe71-7071-471e-89cd-956af51aac92",
         "name": "Chaussure"
     },
     {
-        "id": 6,
+        "id": "69d1c869-3ab5-4d82-aba5-3b8745d28e31",
         "name": "Sport"
     },
     {
-        "id": 7,
+        "id": "a8dd766d-4f1f-48d6-acff-cf053c80f652",
         "name": "Ameublement"
     },
     {
-        "id": 8,
+        "id": "3b9f8762-0b02-49b9-b3fc-65e1029306a2",
         "name": "Jeux Vidéos"
     },
     {
-        "id": 9,
+        "id": "29623c33-2efa-4b14-8b90-18bb68023529",
         "name": "Electroménager"
     
     }

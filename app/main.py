@@ -56,15 +56,19 @@ app.add_middleware(
 @app.on_event("startup")
 async def startup_event(db: Session = SessionLocal()):
     Base.metadata.create_all(bind=engine)
-    data_user = json.loads(open('json_db/users.json').read())
-    data_school = json.loads(open('json_db/schools.json').read())
-    data_category = json.loads(open('json_db/categories.json').read())
-    data_post = json.loads(open('json_db/posts.json').read())    
-    #print(len(data_user))
-    cruds.create_list_school(db,data_school)
-    cruds.create_list_user(db,data_user)
-    cruds.create_list_category(db,data_category)
-    cruds.create_list_posts(db,data_post)
+    try:
+        data_user = json.loads(open('json_db/users.json').read())
+        data_school = json.loads(open('json_db/schools.json').read())
+        data_category = json.loads(open('json_db/categories.json').read())
+        data_post = json.loads(open('json_db/posts.json').read())  
+        data_comment =  json.loads(open('json_db/comments.json').read()) 
+        cruds.create_list_school(db,data_school)
+        cruds.create_list_user(db,data_user)
+        cruds.create_list_category(db,data_category)
+        cruds.create_list_posts(db,data_post)
+        cruds.create_list_comment(db,data_comment)
+    except:
+        pass
 
     
     
@@ -241,6 +245,32 @@ def create_comment(comment: schemas.Comment, seller_id: str, current_user: schem
 def get_comments_by_seller(seller_id: str, db: Session= Depends(get_db)):
     return cruds.get_comments_by_seller(db, seller_id)
 
+# COMMENT
+
+@app.get("/list_comment")
+def get_list_comment(db: Session= Depends(get_db)):
+    return cruds.get_all_comments(db)
+
+@app.post("/users/{seller_id}/create_comment")
+def create_comment(comment: schemas.Comment, seller_id: str, current_user: schemas.UserBase = Depends(get_current_active_user), db: Session = Depends(get_db)):
+    return cruds.create_comment(db=db, comment=comment, buyer_id=current_user.id, seller_id=seller_id)
+
+@app.get('/users/{seller_id}/comments')
+def get_comments_by_seller(seller_id: str, db: Session= Depends(get_db)):
+    return cruds.get_comments_by_seller(db, seller_id)
+
+
+# rating general utilisateur 
+
+
+@app.get('/users/{seller_id}/comments')
+def get_comments_by_seller(seller_id: str, db: Session= Depends(get_db)):
+    return cruds.get_comments_by_seller(db, seller_id)
+
+
+# remplir des jsons de référence pour le post et le comment
+
+# obtenir l'image du post et sa description
 @app.get('/usersbyschool')
 def get_users_by_school(school_id: str, db: Session= Depends(get_db)):
     return cruds.get_users_by_school(db, school_id)

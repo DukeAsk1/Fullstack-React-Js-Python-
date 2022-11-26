@@ -86,6 +86,9 @@ def create_list_category(db: Session,list_category):
 def get_all_category(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Category).offset(skip).limit(limit).all()
 
+def get_category_id(db: Session,name:str):
+    return db.query(models.Category.id).filter(models.Category.name == name)
+
 # LOGIN
 
 def verify_password(plain_password, base_password):
@@ -150,9 +153,8 @@ def get_posts(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Post).offset(skip).limit(limit).all()
 
 
-
-def get_posts_by_category(db: Session, cat: str, skip: int = 0, limit: int = 100):
-    return db.query(models.Post).filter(models.Post.category == cat).offset(skip).limit(limit).all()
+def get_posts_by_category(db: Session, id: int, skip: int = 0, limit: int = 100):
+    return db.query(models.Post).filter(models.Post.category == id).offset(skip).limit(limit).all()
 
 
 

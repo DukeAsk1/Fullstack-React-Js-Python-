@@ -22,5 +22,18 @@
     {
         "id": 6,
         "name": "Sport"
+    },
+    {
+        "id": 7,
+        "name": "Ameublement"
+    },
+    {
+        "id": 8,
+        "name": "Jeux Vidéos"
+    },
+    {
+        "id": 9,
+        "name": "Electroménager"
+    
     }
 ]

@@ -63,3 +63,4 @@ class Post(Base):
     created_at = Column(DateTime())
 
     seller = relationship("User")
+    category_id = relationship("Category")

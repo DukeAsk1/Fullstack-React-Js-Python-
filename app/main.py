@@ -168,13 +168,10 @@ async def read_users_me(current_user: schemas.UserBase = Depends(get_current_act
 def get_posts(db: Session= Depends(get_db)):
     return cruds.get_posts(db)
 
-@app.get('/posts/{cat_id}', response_model=schemas.Post)
-def get_post(cat_id: str,db: Session= Depends(get_db)):
-    return cruds.get_posts_by_category(db,cat=cat_id)
-
 @app.post("/create_post")#, response_model = schemas.Post)
 def create_post(post: schemas.Post, current_user: schemas.UserBase = Depends(get_current_active_user), db: Session = Depends(get_db)):
-    print(current_user)
+    id = cruds.get_category_id(db,post.category)
+    post.category = id
     return cruds.create_post(db,post,current_user.id)
 
 @app.post("/add_image")
@@ -237,7 +234,11 @@ def create_upload_file(file: UploadFile=File(...)):
         print('marche pas')
     return enc_data
 
-
+@app.get('/posts/{cat_name}')
+def get_posts_by_category(cat_name: str,db: Session= Depends(get_db)):
+    id = cruds.get_category_id(db,cat_name)
+    print(id)
+    return cruds.get_posts_by_category(db,id)
 
 
 

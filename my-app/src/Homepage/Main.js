@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import lebonplanimg from "../lebonplan.png";
 import data from "../api/annonces";
 
+import useFetchUsers from "../CustomHooks/useFetchUsers";
+
 const Main = () => {
   const [categories, setCategories] = useState();
 
@@ -27,12 +29,14 @@ const Main = () => {
     <>
       <div className="Main-Container">
         <div className="main-nav">
-          <h2>LE LOGO</h2>
+          <Link className="text-link" to="/">
+            <h2>LE LOGO</h2>
+          </Link>
           <button className="btn">
             <h4>Déposer une annonce</h4>
           </button>
           <button className="btn">
-            <Link to={`/User/User/`} className="text-link">
+            <Link to={`/user/${"efayonga"}`} className="text-link">
               <h4>Mon Profil</h4>
             </Link>
           </button>

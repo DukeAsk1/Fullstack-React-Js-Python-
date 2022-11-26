@@ -6,6 +6,8 @@ export default [
     localisation: "Paris",
     img: "https://img.leboncoin.fr/api/v1/lbcpb1/images/2f/ec/ad/2fecad4dc41aab81639a6425e0e3721cb12d6106.jpg?rule=classified-628x380-avif",
     categorie: "voiture",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Exercitationem voluptates vitae obcaecati! Consequuntur incidunt similique praesentium! Qui sequi maiores veritatis totam maxime, molestias consectetur praesentium natus commodi ipsam laudantium quos.",
   },
   {
     id: 1,
@@ -14,6 +16,8 @@ export default [
     localisation: "Marseille",
     img: "https://img.leboncoin.fr/api/v1/lbcpb1/images/77/50/f3/7750f3ffacf7c03043d0c3988995e61d366401a2.jpg?rule=classified-760x460-avif",
     categorie: "enceinte",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Exercitationem voluptates vitae obcaecati! Consequuntur incidunt similique praesentium! Qui sequi maiores veritatis totam maxime, molestias consectetur praesentium natus commodi ipsam laudantium quos.",
   },
   {
     id: 2,
@@ -22,6 +26,8 @@ export default [
     localisation: "Montpellier",
     img: "https://img.leboncoin.fr/api/v1/lbcpb1/images/bb/15/10/bb151094d41d275862484a36fa84bacb9f6f07a4.jpg?rule=classified-1200x800-webp",
     categorie: "enceinte",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Exercitationem voluptates vitae obcaecati! Consequuntur incidunt similique praesentium! Qui sequi maiores veritatis totam maxime, molestias consectetur praesentium natus commodi ipsam laudantium quos.",
   },
   {
     id: 3,
@@ -30,6 +36,8 @@ export default [
     localisation: "Paris",
     img: "https://img.leboncoin.fr/api/v1/lbcpb1/images/2f/ec/ad/2fecad4dc41aab81639a6425e0e3721cb12d6106.jpg?rule=classified-628x380-avif",
     categorie: "voiture",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Exercitationem voluptates vitae obcaecati! Consequuntur incidunt similique praesentium! Qui sequi maiores veritatis totam maxime, molestias consectetur praesentium natus commodi ipsam laudantium quos.",
   },
   {
     id: 4,
@@ -38,6 +46,8 @@ export default [
     localisation: "Marseille",
     img: "https://img.leboncoin.fr/api/v1/lbcpb1/images/77/50/f3/7750f3ffacf7c03043d0c3988995e61d366401a2.jpg?rule=classified-760x460-avif",
     categorie: "enceinte",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Exercitationem voluptates vitae obcaecati! Consequuntur incidunt similique praesentium! Qui sequi maiores veritatis totam maxime, molestias consectetur praesentium natus commodi ipsam laudantium quos.",
   },
   {
     id: 5,
@@ -46,5 +56,7 @@ export default [
     localisation: "Montpellier",
     img: "https://img.leboncoin.fr/api/v1/lbcpb1/images/bb/15/10/bb151094d41d275862484a36fa84bacb9f6f07a4.jpg?rule=classified-1200x800-webp",
     categorie: "enceinte",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Exercitationem voluptates vitae obcaecati! Consequuntur incidunt similique praesentium! Qui sequi maiores veritatis totam maxime, molestias consectetur praesentium natus commodi ipsam laudantium quos.",
   },
 ];

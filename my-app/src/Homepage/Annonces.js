@@ -10,9 +10,7 @@ const Annonces = () => {
     const result = data.map((annonce, index) => {
       return (
         <>
-          <Link to={`Product/Product/${annonce.id}`} className="text-link">
-            <Annonce annonce={annonce} />
-          </Link>
+          <Annonce annonce={annonce} />
         </>
       );
     });

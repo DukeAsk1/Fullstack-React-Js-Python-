@@ -1,36 +1,51 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import useFetchUsers from "../CustomHooks/useFetchUsers";
+import useFetchPosts from "../CustomHooks/useFetchPosts";
+import useFetchSchools from "../CustomHooks/useFetchSchools";
 import Main from "../Homepage/Main";
 import data from "../api/annonces";
 import Annonce from "../Homepage/Annonce";
 
 const User = () => {
-  const [users, setUsers] = useState([]);
+  const { loading, users } = useFetchUsers();
+  const { postloading, posts } = useFetchPosts();
+  const { schoolloading, schools } = useFetchSchools();
 
-  const getUsers = async () => {
-    try {
-      var url = "http://localhost:5000";
-      var page = "/list_user";
+  const { id } = useParams();
 
-      const response = await fetch(url + page);
-      const users = await response.json();
+  const [user, setUser] = useState([]);
+  const [postlist, setPostList] = useState([]);
+  const [theschool, setTheSchool] = useState("");
 
-      const result = users.map((user, index) => {
-        return (
-          <>
-            <p>
-              Pseudo : {user.username} | Prénom : {user.firstname} | email :
-              {user.email} | id :{user.id}
-            </p>
-          </>
-        );
-      });
+  useEffect(() => {
+    if (loading) return;
+    let result = users.filter((user) => {
+      return user.username === id;
+    });
 
-      setUsers(result);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+    setUser(result[0]["name"]);
+  }, [loading, users]);
+
+  useEffect(() => {
+    if (postloading) return;
+    let result = posts.filter((post) => {
+      return post.seller_id === user.id;
+    });
+
+    setPostList(result);
+  }, [postloading, posts]);
+
+  useEffect(() => {
+    if (schoolloading || loading) return;
+    let result = schools.find((curschool) => {
+      return user.school_id === curschool.id;
+    });
+
+    console.log(result);
+    setTheSchool(result);
+  }, [schoolloading, schools]);
 
   const UserPresentation = () => {
     return (
@@ -42,13 +57,25 @@ const User = () => {
 
           <div className="rightside">
             <div className="left">
-              <h3> Pseudo : pseudo</h3>
-              <h3> Email : email</h3>
+              <h3>
+                {" "}
+                {user.lastname} {user.firstname}
+              </h3>
+              <h3>
+                {" "}
+                Email :<br /> {user.email}
+              </h3>
             </div>
 
             <div className="right">
-              <h3> Ecole : Ecole</h3>
-              <h3> Habite à : localisation</h3>
+              <h3>
+                {" "}
+                Ecole :<br /> {theschool.name}
+              </h3>
+              <h3>
+                {" "}
+                Habite à :<br /> {user.city}
+              </h3>
             </div>
           </div>
         </div>
@@ -67,26 +94,19 @@ const User = () => {
   };
 
   const AnnoncesUtilisateur = () => {
-    const result = data.map((annonce, index) => {
-      return (
-        <>
-          <Annonce annonce={annonce} />
-        </>
-      );
-    });
     return (
       <>
         <div className="annoncesutilisateur-container">
-          <h2>X annonces</h2>
-          <div className="listeannonces">{result}</div>
+          <h2>{postlist.length} annonces</h2>
+          <div className="listeannonces">
+            {postlist.map((post) => {
+              return <Annonce annonce={post} />;
+            })}
+          </div>
         </div>
       </>
     );
   };
-
-  useEffect(() => {
-    getUsers();
-  }, []);
 
   return (
     <>

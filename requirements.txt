@@ -10,3 +10,4 @@ python-multipart
 fastapi-users
 python-jose
 Pillow
+numpy

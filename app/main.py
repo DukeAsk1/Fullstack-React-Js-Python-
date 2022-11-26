@@ -269,6 +269,10 @@ def get_comments_by_seller(seller_id: str, db: Session= Depends(get_db)):
 def get_comments_by_seller(seller_id: str, db: Session= Depends(get_db)):
     return cruds.get_comments_by_seller(db, seller_id)
 
+@app.get('/users/{seller_id}/rating')
+def get_rating(seller_id: str, db: Session= Depends(get_db)):
+    return cruds.get_rating(db, seller_id)
+
 
 # remplir des jsons de référence pour le post et le comment
 
@@ -276,3 +280,14 @@ def get_comments_by_seller(seller_id: str, db: Session= Depends(get_db)):
 @app.get('/usersbyschool')
 def get_users_by_school(school_id: str, db: Session= Depends(get_db)):
     return cruds.get_users_by_school(db, school_id)
+
+
+# gestion user
+@app.get('/users/me/posts')
+def get_own_posts(current_user: schemas.UserBase = Depends(get_current_active_user), db: Session= Depends(get_db)):
+    return cruds.get_own_posts(db, current_user.id)
+
+
+@app.get('/users/me/delete/{post_id}')
+def delete_post(post_id: str, current_user: schemas.UserBase = Depends(get_current_active_user), db: Session= Depends(get_db)):
+    return cruds.delete_post(db, current_user.id, post_id)

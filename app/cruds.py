@@ -72,7 +72,8 @@ def create_list_user(db: Session,list_user):
         db.refresh(db_user)
         #db_user.id = str(db_user.id)        
 
-
+def get_users_by_school(db: Session, school_id: str):
+    return db.query(models.User).filter(models.User.school_id == school_id).all()
 
 # CATEGORY
         
@@ -161,6 +162,14 @@ def get_posts_by_category(db: Session, id: int, skip: int = 0, limit: int = 100)
 
 # COMMENT
 
+def create_list_comment(db: Session, list_comment):
+    for i in list_comment:
+        db_comment = models.Comment(id= str(uuid.uuid4()),**i)
+        db.add(db_comment)
+        db.commit()
+        db.refresh(db_comment)
+        #db_comment.id = str(db_comment.id)
+
 def create_comment(db: Session, comment: schemas.Comment):
     #record = db.query(models.School).filter(models.School.id == school.id).first()
     #if record:
@@ -172,11 +181,16 @@ def create_comment(db: Session, comment: schemas.Comment):
     db_comment.id = str(db_comment.id)
     return db_comment
 
+def get_all_comments(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Comment).offset(skip).limit(limit).all()
 
 def get_comment(db: Session, user_id: int):
     return db.query(models.Comment).filter(models.Comment.id == user_id).first()
 
+def get_comments_by_seller(db: Session, seller_id: str):
+    return db.query(models.Comment).filter(models.Comment.seller_id == seller_id).all()
 
-def get_users_by_school(db: Session, school_id: str):
-    return db.query(models.User).filter(models.User.school_id == school_id).all()
+
+
+
 

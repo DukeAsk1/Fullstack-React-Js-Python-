@@ -161,11 +161,13 @@ def get_posts_by_category(db: Session, id: int, skip: int = 0, limit: int = 100)
 
 # COMMENT
 
-def create_comment(db: Session, comment: schemas.Comment):
+def create_comment(db: Session, comment: schemas.Comment, buyer_id: str, seller_id: str):
     #record = db.query(models.School).filter(models.School.id == school.id).first()
     #if record:
     #    raise HTTPException(status_code=409, detail="Already exists")
     db_comment = models.Comment(**comment.dict())
+    db_comment.buyer_id=buyer_id
+    db_comment.seller_id=seller_id
     db.add(db_comment)
     db.commit()
     db.refresh(db_comment)
@@ -173,9 +175,8 @@ def create_comment(db: Session, comment: schemas.Comment):
     return db_comment
 
 
-def get_comment(db: Session, user_id: int):
-    return db.query(models.Comment).filter(models.Comment.id == user_id).first()
-
+def get_comments_by_seller(db: Session, seller_id: str):
+    return db.query(models.Comment).filter(models.Comment.seller_id == seller_id).all()
 
 def get_users_by_school(db: Session, school_id: str):
     return db.query(models.User).filter(models.User.school_id == school_id).all()

@@ -198,3 +198,17 @@ def get_rating(db:Session, seller_id: str):
 
 
 
+
+# gestion user
+def get_own_posts(db:Session, seller_id: str):
+    return db.query(models.Post).filter(models.Post.seller_id == seller_id).all()
+
+def delete_post(db:Session, current_id: str, post_id: str):
+    db_post = db.query(models.Post).filter(models.Post.id == post_id).first()
+    if str(db_post.seller_id) != current_id:
+        raise HTTPException(status_code=400, detail="Not authorized")
+    db.delete(db_post)
+    db.commit()
+    return db_post
+
+    

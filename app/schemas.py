@@ -49,7 +49,7 @@ class School(BaseModel):
         orm_mode = True
 
 class Category(BaseModel):
-    id: int
+    id: Annotated[str, Field(default_factory=lambda: uuid4().hex)]
     name: str
 
     class Config:
@@ -71,7 +71,7 @@ class Comment(BaseModel):
 class Post(BaseModel):
     id: Annotated[str, Field(default_factory=lambda: uuid4().hex)]
     title: str
-    category : str
+    category_id :  Annotated[str, Field(default_factory=lambda: uuid4().hex)]
     jpeg : Optional[str]
     description: Optional[str]
     seller_id : Annotated[str, Field(default_factory=lambda: uuid4().hex)]

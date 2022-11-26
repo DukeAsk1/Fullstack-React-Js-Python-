@@ -154,7 +154,6 @@ async def get_current_user(db: Session = Depends(get_db), token: str = Depends(o
     return user
 
 async def get_current_active_user(current_user: schemas.UserBase = Depends(get_current_user)):
-    print(current_user.username)
     current_user.id=str(current_user.id)
     if not current_user:
         raise HTTPException(status_code=400, detail="Inactive user")
@@ -238,12 +237,13 @@ def create_upload_file(file: UploadFile=File(...)):
         print('marche pas')
     return enc_data
 
-@app.get('/posts/{cat_name}')
-def get_posts_by_category(cat_name: str,db: Session= Depends(get_db)):
-    id = cruds.get_category_id(db,cat_name)
-    print(id)
-    return cruds.get_posts_by_category(db,id)
+@app.post("/users/{seller_id}/create_comment")
+def create_comment(comment: schemas.Comment, seller_id: str, current_user: schemas.UserBase = Depends(get_current_active_user), db: Session = Depends(get_db)):
+    return cruds.create_comment(db=db, comment=comment, buyer_id=current_user.id, seller_id=seller_id)
 
+@app.get('/users/{seller_id}/comments')
+def get_comments_by_seller(seller_id: str, db: Session= Depends(get_db)):
+    return cruds.get_comments_by_seller(db, seller_id)
 
 # COMMENT
 
@@ -263,8 +263,14 @@ def get_comments_by_seller(seller_id: str, db: Session= Depends(get_db)):
 # rating general utilisateur 
 
 
+@app.get('/users/{seller_id}/comments')
+def get_comments_by_seller(seller_id: str, db: Session= Depends(get_db)):
+    return cruds.get_comments_by_seller(db, seller_id)
 
 
 # remplir des jsons de référence pour le post et le comment
 
 # obtenir l'image du post et sa description
+@app.get('/usersbyschool')
+def get_users_by_school(school_id: str, db: Session= Depends(get_db)):
+    return cruds.get_users_by_school(db, school_id)

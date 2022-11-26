@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Float, String, DateTime, ForeignKey, Integer, Table
+from sqlalchemy import Column, Float, String, DateTime, ForeignKey, Integer, Numeric
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.dialects.postgresql import UUID
 from database import Base
@@ -48,7 +48,6 @@ class Comment(Base):
 
     buyer = relationship("User", foreign_keys=[buyer_id])
     seller = relationship("User", foreign_keys=[seller_id])
-
 
 
 class Post(Base):

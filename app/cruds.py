@@ -170,11 +170,13 @@ def create_list_comment(db: Session, list_comment):
         db.refresh(db_comment)
         #db_comment.id = str(db_comment.id)
 
-def create_comment(db: Session, comment: schemas.Comment):
+def create_comment(db: Session, comment: schemas.Comment, buyer_id: str, seller_id: str):
     #record = db.query(models.School).filter(models.School.id == school.id).first()
     #if record:
     #    raise HTTPException(status_code=409, detail="Already exists")
     db_comment = models.Comment(**comment.dict())
+    db_comment.buyer_id=buyer_id
+    db_comment.seller_id=seller_id
     db.add(db_comment)
     db.commit()
     db.refresh(db_comment)

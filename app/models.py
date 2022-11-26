@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Float, String, DateTime, ForeignKey, Integer, Numeric
+from sqlalchemy import Column, Float, String, DateTime, ForeignKey, Integer, Boolean
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.dialects.postgresql import UUID
 from database import Base
@@ -63,3 +63,22 @@ class Post(Base):
 
     seller = relationship("User")
     category = relationship("Category")
+    
+
+class Order(Base):
+    __tablename__ = "Order"
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True)
+    buyer_id = Column(UUID(as_uuid=True), ForeignKey("User.id"))
+    seller_id = Column(UUID(as_uuid=True), ForeignKey("User.id"))
+    post_id = Column(UUID(as_uuid=True), ForeignKey("Post.id"))
+    stage = Column(Integer)
+    created_at = Column(DateTime())
+    sent_at = Column(DateTime())
+    received_at = Column(DateTime())
+    rated_at = Column(DateTime())
+    
+
+    buyer = relationship("User", foreign_keys=[buyer_id])
+    seller = relationship("User", foreign_keys=[seller_id])   
+    post = relationship("Post")
+

@@ -94,7 +94,7 @@ def get_list_ids(db: Session= Depends(get_db)):
 
 # USER
 
-@app.post("/users", response_model=schemas.UserCreate)
+@app.post("/register", response_model=schemas.UserCreate)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = cruds.get_user_by_email(db, email=user.email)
     if db_user:
@@ -195,7 +195,7 @@ def add_image(id: str, file: UploadFile=File(...), db: Session = Depends(get_db)
     val = {"jpeg":str(enc_data)}
     return cruds.add_image(db=db, data=val, id=id)
 
-@app.get('/get_post', response_model=schemas.Post)
+@app.get('/get_post')
 def get_post(post_id: str,db: Session= Depends(get_db)):
     return cruds.get_post_by_id(db,post_id)
 
@@ -267,8 +267,11 @@ def get_comments_by_seller(seller_id: str, db: Session= Depends(get_db)):
     return cruds.get_comments_by_seller(db, seller_id)
 
 
-# rating general utilisateur 
+# page utilisateur
 
+@app.get('/users/{seller_id}/posts')
+def get_posts_by_seller(seller_id: str, db: Session= Depends(get_db)):
+    return cruds.get_posts_by_seller(db, seller_id)
 
 @app.get('/users/{seller_id}/comments')
 def get_comments_by_seller(seller_id: str, db: Session= Depends(get_db)):
@@ -293,6 +296,16 @@ def get_own_posts(current_user: schemas.UserBase = Depends(get_current_active_us
     return cruds.get_own_posts(db, current_user.id)
 
 
-@app.get('/users/me/delete/{post_id}')
+@app.post('/users/me/delete/{post_id}')
 def delete_post(post_id: str, current_user: schemas.UserBase = Depends(get_current_active_user), db: Session= Depends(get_db)):
     return cruds.delete_post(db, current_user.id, post_id)
+
+
+# commande
+@app.put('/order/create')
+def create_order(post_id: str, current_user: schemas.UserBase = Depends(get_current_active_user), db: Session = Depends(get_db)):
+    return cruds.create_order(db=db, buyer_id=current_user.id, post_id=post_id)
+
+@app.post('/order/{order_id}/next')
+def order_next_stage(order_id: str, current_user: schemas.UserBase = Depends(get_current_active_user), db: Session= Depends(get_db)):
+    return cruds.order_next_stage(db=db, current_id=current_user.id, order_id=order_id)

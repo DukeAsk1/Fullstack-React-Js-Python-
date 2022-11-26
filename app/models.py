@@ -33,7 +33,7 @@ class School(Base):
 
 class Category(Base):
     __tablename__ = "Category"
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(UUID(as_uuid=True), primary_key=True, index=True)
     name = Column(String)
 
 
@@ -55,14 +55,14 @@ class Post(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, index=True)
     seller_id = Column(UUID(as_uuid=True), ForeignKey("User.id"))
     title = Column(String)
-    category = Column(Integer, ForeignKey("Category.id")) #Valeurs fixées, style checkbox
+    category_id = Column(UUID(as_uuid=True), ForeignKey("Category.id")) #Valeurs fixées, style checkbox
     jpeg = Column(String)
     description = Column(String)
     price = Column(Float)
     created_at = Column(DateTime())
 
     seller = relationship("User")
-    category_id = relationship("Category")
+    category = relationship("Category")
     
 
 class Order(Base):
@@ -81,3 +81,4 @@ class Order(Base):
     buyer = relationship("User", foreign_keys=[buyer_id])
     seller = relationship("User", foreign_keys=[seller_id])   
     post = relationship("Post")
+

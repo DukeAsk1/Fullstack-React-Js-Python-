@@ -156,8 +156,8 @@ def get_posts(db: Session, skip: int = 0, limit: int = 100):
 def get_posts_by_seller(db:Session, seller_id: str, skip: int = 0, limit: int = 100):
     return db.query(models.Post).filter(models.Post.seller_id == seller_id).offset(skip).limit(limit).all()
 
-def get_posts_by_category(db: Session, id: int, skip: int = 0, limit: int = 100):
-    return db.query(models.Post).filter(models.Post.category == id).offset(skip).limit(limit).all()
+def get_posts_by_category(db: Session, cat: str, skip: int = 0, limit: int = 100):
+    return db.query(models.Post).filter(models.Post.category == cat).offset(skip).limit(limit).all()
 
 
 

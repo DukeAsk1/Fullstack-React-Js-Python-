@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends,Header, Request, HTTPException, status, UploadFile,File
+from fastapi import FastAPI, Depends,Header, Request, HTTPException, status, UploadFile,File, Response
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.encoders import jsonable_encoder
@@ -209,16 +209,18 @@ def get_post_image(post_id: str, db: Session = Depends(get_db)):
     #print(img_enc)
     img_dec = str(base64.b64decode(img_enc))
     #print(img_dec[:100])
-    decodeit = open('hello_level.jpeg', 'wb')
+    decodeit = open('posts_images/{}.jpeg'.format(post_id), 'wb')
     decodeit.write(base64.b64decode((img_enc)))
     decodeit.close()
     img_dec = img_dec[2: ]
     img_dec = img_dec[:-1 ]
     #print(img_dec[:100])
     #json_compatible_item_data = jsonable_encoder(img_dec)
-    return JSONResponse(content=img_dec,media_type="image/jpg")
-    #return StreamingResponse(img_dec, media_type="image/jpg")
+    #return JSONResponse(content=decodeit,media_type="image/jpg")
+    print(type(decodeit))
+    #return Response(content=img_dec,media_type='image/jpeg')
 
+    return {'filename':'{}.jpeg'.format(post_id)}
 
 @app.post("/uploadImage")
 def create_upload_file(file: UploadFile=File(...)):
@@ -244,6 +246,11 @@ def create_comment(comment: schemas.Comment, seller_id: str, current_user: schem
 @app.get('/users/{seller_id}/comments')
 def get_comments_by_seller(seller_id: str, db: Session= Depends(get_db)):
     return cruds.get_comments_by_seller(db, seller_id)
+
+@app.get('/posts/{category}')
+def get_posts_by_category(category: str, db:Session = Depends(get_db)):
+    return cruds.get_posts_by_category(db,category)
+
 
 # COMMENT
 

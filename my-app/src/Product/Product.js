@@ -8,6 +8,7 @@ import useFetchListUser from "../CustomHooks/useFetchListUser";
 import useFetchPosts from "../CustomHooks/useFetchPosts";
 import useFetchListSchools from "../CustomHooks/useFetchListSchools";
 import useFetchListCategory from "../CustomHooks/useFetchListCategory";
+import useFetchImageFromPostId from "../CustomHooks/useFetchImageFromPostId";
 
 const Product = () => {
   const { id } = useParams();
@@ -16,12 +17,19 @@ const Product = () => {
   const { loadinglistposts, listposts } = useFetchPosts();
   const { loadinglistschools, listschools } = useFetchListSchools();
   const { loadinglistcategory, listcategory } = useFetchListCategory();
+  const { loadingimage, image } = useFetchImageFromPostId(id);
 
   const [user, setUser] = useState([]);
   const [post, setPost] = useState([]);
   const [category, setCategory] = useState([]);
+  const [imagelink, setImageLink] = useState("");
 
   const [theuserschool, setTheUsersSchool] = useState([]);
+  useEffect(() => {
+    if (loadingimage) return;
+    let finalPath = image["filename"];
+    setImageLink(finalPath);
+  }, [loadingimage]);
 
   useEffect(() => {
     if (loadinglistposts) return;
@@ -45,7 +53,7 @@ const Product = () => {
       return user.school_id === curschool.id;
     });
     setTheUsersSchool(result3);
-  }, [loadinglistschools, listschools, user]);
+  }, [loadinglistschools, listschools, loadinglistuser]);
 
   useEffect(() => {
     if (loadinglistcategory || loadinglistposts) return;
@@ -61,7 +69,7 @@ const Product = () => {
         <div className="PageProduit-container">
           <div className="produit-container">
             <div className="imagecontainer">
-              <img src={img}></img>
+              <img src={imagelink} />
             </div>
             <div className="informations-container">
               <h3>{post.title}</h3>

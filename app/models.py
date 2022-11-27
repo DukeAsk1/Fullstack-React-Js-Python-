@@ -18,8 +18,9 @@ class User(Base):
     city = Column(String)
     postal_code = (Column(Integer))
     description = Column(String)
+    jpeg = Column(String)
     created_at = Column(DateTime())
-
+    
     school = relationship("School")
 
 
@@ -29,6 +30,7 @@ class School(Base):
     name = Column(String)
     address = Column(String)
     description = Column(String)
+    jpeg = Column(String)
     created_at = Column(DateTime())
 
 class Category(Base):

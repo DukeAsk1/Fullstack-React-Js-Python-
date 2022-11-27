@@ -92,6 +92,39 @@ async def create(school: schemas.School, db: Session = Depends(get_db)):
 def get_list_ids(db: Session= Depends(get_db)):
     return cruds.get_list_school(db)
 
+@app.get('/schools')
+def get_schools(db: Session= Depends(get_db)):
+    return cruds.get_schools(db)
+
+@app.get('/get_school_image')
+def get_school_image(school_id:str,db: Session= Depends(get_db)):
+    img_data = cruds.get_school_image(db,school_id)
+    img_enc = img_data['jpeg']
+    img_enc = img_enc[2: ]
+    img_enc = img_enc[:-1 ]
+    decodeit = open('schools_images/{}.jpeg'.format(school_id), 'wb')
+    decodeit.write(base64.b64decode((img_enc)))
+    decodeit.close()
+    return {'filename':'{}.jpeg'.format(school_id)}
+
+@app.post("/add_school_image")
+def add_school_image(id: str, file: UploadFile=File(...), db: Session = Depends(get_db)):
+    try:        
+        im = Image.open(file.file)
+        if im.mode in ("RGBA", "P"): 
+            im = im.convert("RGB")
+        buf = io.BytesIO()
+        im.save(buf, 'JPEG', quality=50)
+        contents = buf.getvalue()
+        enc_data = base64.b64encode(contents)
+        buf.seek(0)
+    except Exception:
+        print('marche pas')
+    val = {"jpeg":str(enc_data)}
+    return cruds.add_school_image(db=db, data=val, id=id)
+
+
+
 # USER
 
 @app.post("/users", response_model=schemas.UserCreate)
@@ -108,6 +141,33 @@ def get_list_ids(db: Session= Depends(get_db)):
 @app.get('/usersbyschool')
 def get_users_by_school(school_id: str, db: Session= Depends(get_db)):
     return cruds.get_users_by_school(db, school_id)
+
+@app.get('/get_user_image')
+def get_user_image(user_id:str,db: Session= Depends(get_db)):
+    img_data = cruds.get_user_image(db,user_id)
+    img_enc = img_data['jpeg']
+    img_enc = img_enc[2: ]
+    img_enc = img_enc[:-1 ]
+    decodeit = open('users_images/{}.jpeg'.format(user_id), 'wb')
+    decodeit.write(base64.b64decode((img_enc)))
+    decodeit.close()
+    return {'filename':'{}.jpeg'.format(user_id)}
+
+@app.post("/add_user_image")
+def add_school_image(id: str, file: UploadFile=File(...), db: Session = Depends(get_db)):
+    try:        
+        im = Image.open(file.file)
+        if im.mode in ("RGBA", "P"): 
+            im = im.convert("RGB")
+        buf = io.BytesIO()
+        im.save(buf, 'JPEG', quality=50)
+        contents = buf.getvalue()
+        enc_data = base64.b64encode(contents)
+        buf.seek(0)
+    except Exception:
+        print('marche pas')
+    val = {"jpeg":str(enc_data)}
+    return cruds.add_user_image(db=db, data=val, id=id)
 
 
 # CATEGORY
@@ -239,13 +299,13 @@ def create_upload_file(file: UploadFile=File(...)):
         print('marche pas')
     return enc_data
 
-@app.post("/users/{seller_id}/create_comment")
-def create_comment(comment: schemas.Comment, seller_id: str, current_user: schemas.UserBase = Depends(get_current_active_user), db: Session = Depends(get_db)):
-    return cruds.create_comment(db=db, comment=comment, buyer_id=current_user.id, seller_id=seller_id)
+# @app.post("/users/{seller_id}/create_comment")
+# def create_comment(comment: schemas.Comment, seller_id: str, current_user: schemas.UserBase = Depends(get_current_active_user), db: Session = Depends(get_db)):
+#     return cruds.create_comment(db=db, comment=comment, buyer_id=current_user.id, seller_id=seller_id)
 
-@app.get('/users/{seller_id}/comments')
-def get_comments_by_seller(seller_id: str, db: Session= Depends(get_db)):
-    return cruds.get_comments_by_seller(db, seller_id)
+# @app.get('/users/{seller_id}/comments')
+# def get_comments_by_seller(seller_id: str, db: Session= Depends(get_db)):
+#     return cruds.get_comments_by_seller(db, seller_id)
 
 @app.get('/posts/{category}')
 def get_posts_by_category(category: str, db:Session = Depends(get_db)):

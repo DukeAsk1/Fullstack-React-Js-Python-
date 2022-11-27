@@ -24,9 +24,10 @@ class UserCreate(UserBase):
     username : str
     password: str
     address: str
-    city = str
-    postal_code = str
-    description: Optional[str]
+    city : str
+    postal_code : str
+    description : Optional[str]
+    jpeg : Optional[str]
     created_at: Annotated[datetime, Field(default_factory=lambda: datetime.now())]
 
 class Token(BaseModel):
@@ -43,6 +44,7 @@ class School(BaseModel):
     name: str
     address: str
     description: Optional[str]
+    jpeg : Optional[str]
     created_at: Annotated[datetime, Field(default_factory=lambda: datetime.now())]
 
     class Config:

@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 
 networks:
   default:
@@ -10,9 +10,10 @@ services:
       - default
     volumes:
       - ./app/:/app
-    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000", "--reload"]
+    command:
+      ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000", "--reload"]
     ports:
-    - "5000:5000"
+      - "5000:5000"
     env_file:
       - .env
     depends_on:
@@ -24,4 +25,9 @@ services:
     env_file:
       - .env
     ports:
-    - "5432:5432"
+      - "5432:5432"
+
+  front:
+    build: ./my-app
+    ports:
+      - "3000:3000"

@@ -132,7 +132,10 @@ Parmis les fonctionnalités disponibles sur le site, vous aurez accès :
 # Problèmes rencontrés et fonctionnalités inaccessibles
 
 Pour le développement front-end, nous avons rencontrés des problèmes de temps. Nous avons sur-estimé la charge d'apprentissage nécessaire pour apprendre le framework React, javascript, HTML et css.
-Les élements du back end ont tous été réalisés (disponible à l'adresse http://localhost/5000/docs) mais le front-end pour l'utiliser manque pour certaines fonctionnalités :
+Les élements du back end ont tous été réalisés (disponible à la consultation et au tests à l'adresse http://localhost/5000/docs) mais le front-end pour l'utiliser manque pour certaines fonctionnalités :
 
 - Il est impossible de se connecter à votre compte, ou de créer votre propre compte
 - Il est impossible de créer une annonce, ou d'effectuer de la maintenance sur vos annonces (supprimer, modérer les commentaires)
+- Il est impossible de mettre un commentaire à un utilisateur
+- Il est impossible d'ajouter des élements à votre panier
+- Les images ne chargent pas sur les annonces

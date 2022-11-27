@@ -97,9 +97,21 @@ Nous allons ensuite remplir la base de données en créant plusieurs tables dans
 Pour la table des utilisateurs, nous aurons besoin d'un id généré aléatoire, un nom, prénom, username, et une adresse e-mail et une adresse.\
 Les écoles auront une description, nom en général et une adresse.\
 Les commentaires auront un message venant d'un destinataire et d'un vendeur, et avec un notation.
+
 ## Second Step : Définition des valeurs des liens de pages
 
+On a défini pour chaque lien de notre `API` une fonctionnalité particulière, allant de chercher les annonces par grande catégorie, jusqu'à obtenir les étapes de paiements/transactions. \
+Nous avons pensé aux problèmes de garder en mémoire les images de chaque annonce, pour rendre les annonces mieux visible. On a donc encodé les images en message string `base64` puis stockées dans notre base de données, on les a ensuite décodé pour les avoir continuellement sur les annonces. 
+
+
+## Third Step : Application des fonctions sur les pages webs
+
+
 Nous devons ensuite définir le contenu que nous voulons déployer sur chaque page. 
+
+
+
+
 
 
 

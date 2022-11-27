@@ -1,13 +1,26 @@
 import React from "react";
 import Annonce from "./Annonce";
 import { useState, useEffect } from "react";
-import data from "../api/annonces";
 import { Link } from "react-router-dom";
+import useFetchPosts from "../CustomHooks/useFetchPosts";
 
 const Annonces = () => {
+  const { loadinglistposts, listposts } = useFetchPosts();
+  const [posts, setPosts] = useState();
+
+  useEffect(() => {
+    if (loadinglistposts) return;
+    setPosts(listposts);
+  }, [loadinglistposts, listposts]);
+
+  useEffect(() => {
+    getAnnonces();
+  }, [posts]);
+
   const [annonces, setAnnonces] = useState([]);
   const getAnnonces = () => {
-    const result = data.map((annonce, index) => {
+    if (!posts) return;
+    const result = posts.map((annonce, index) => {
       return (
         <>
           <Annonce annonce={annonce} />
@@ -16,10 +29,6 @@ const Annonces = () => {
     });
     setAnnonces(result);
   };
-
-  useEffect(() => {
-    getAnnonces();
-  }, []);
 
   return (
     <>

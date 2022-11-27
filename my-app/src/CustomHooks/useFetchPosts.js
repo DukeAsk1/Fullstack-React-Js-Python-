@@ -1,24 +1,23 @@
 import React from "react";
 import { useState, useEffect } from "react";
+const url = "http://localhost:5000/posts";
 
 const useFetchPosts = () => {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loadinglistposts, setLoadingPosts] = useState(true);
+  const [listposts, setListPosts] = useState();
 
-  const url = "http://localhost:5000/posts";
-
-  const getPosts = async () => {
+  const getData = async () => {
     const response = await fetch(url);
-    const data = await response.json();
-    setPosts(data);
-    setLoading(false);
+    const received = await response.json();
+    setListPosts(received);
+    setLoadingPosts(false);
   };
 
   useEffect(() => {
-    getPosts();
-  }, []);
+    getData();
+  }, [url]);
 
-  return { loading, posts };
+  return { loadinglistposts, listposts };
 };
 
 export default useFetchPosts;

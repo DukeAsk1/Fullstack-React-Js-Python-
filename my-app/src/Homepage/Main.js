@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 import lebonplanimg from "../lebonplan.png";
 import data from "../api/annonces";
 
-import useFetchUsers from "../CustomHooks/useFetchUsers";
-
 const Main = () => {
+  const [user, setUser] = useState([]);
+
   const [categories, setCategories] = useState();
 
   const getNumberOfCategories = () => {

@@ -1,51 +1,47 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import useFetchUsers from "../CustomHooks/useFetchUsers";
-import useFetchPosts from "../CustomHooks/useFetchPosts";
-import useFetchSchools from "../CustomHooks/useFetchSchools";
 import Main from "../Homepage/Main";
-import data from "../api/annonces";
 import Annonce from "../Homepage/Annonce";
 
+import useFetchListSchools from "../CustomHooks/useFetchListSchools";
+import useFetchListUser from "../CustomHooks/useFetchListUser";
+import useFetchPosts from "../CustomHooks/useFetchPosts";
+
 const User = () => {
-  const { loading, users } = useFetchUsers();
-  const { postloading, posts } = useFetchPosts();
-  const { schoolloading, schools } = useFetchSchools();
+  const { loadinglistuser, listuser } = useFetchListUser();
+  const { loadinglistposts, listposts } = useFetchPosts();
+  const { loadinglistschools, listschools } = useFetchListSchools();
 
   const { id } = useParams();
 
   const [user, setUser] = useState([]);
   const [postlist, setPostList] = useState([]);
-  const [theschool, setTheSchool] = useState("");
+  const [theuserschool, setTheUsersSchool] = useState([]);
 
   useEffect(() => {
-    if (loading) return;
-    let result = users.filter((user) => {
+    if (loadinglistuser) return;
+    let result = listuser.filter((user) => {
       return user.username === id;
     });
-
-    setUser(result[0]["name"]);
-  }, [loading, users]);
+    setUser(result[0]);
+  }, [loadinglistuser, listuser]);
 
   useEffect(() => {
-    if (postloading) return;
-    let result = posts.filter((post) => {
+    if (loadinglistposts || loadinglistuser) return;
+    let result2 = listposts.filter((post) => {
       return post.seller_id === user.id;
     });
-
-    setPostList(result);
-  }, [postloading, posts]);
+    setPostList(result2);
+  }, [loadinglistposts, listposts, loadinglistuser]);
 
   useEffect(() => {
-    if (schoolloading || loading) return;
-    let result = schools.find((curschool) => {
+    if (loadinglistschools || loadinglistuser) return;
+    let result3 = listschools.find((curschool) => {
       return user.school_id === curschool.id;
     });
-
-    console.log(result);
-    setTheSchool(result);
-  }, [schoolloading, schools]);
+    setTheUsersSchool(result3);
+  }, [loadinglistschools, listschools, loadinglistuser]);
 
   const UserPresentation = () => {
     return (
@@ -59,7 +55,7 @@ const User = () => {
             <div className="left">
               <h3>
                 {" "}
-                {user.lastname} {user.firstname}
+                {user.lastname} {user.firstname} | {user.username}
               </h3>
               <h3>
                 {" "}
@@ -70,7 +66,7 @@ const User = () => {
             <div className="right">
               <h3>
                 {" "}
-                Ecole :<br /> {theschool.name}
+                Ecole :<br /> {theuserschool ? theuserschool["name"] : ""}
               </h3>
               <h3>
                 {" "}

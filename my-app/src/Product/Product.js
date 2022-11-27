@@ -2,10 +2,58 @@ import React from "react";
 import Main from "../Homepage/Main";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import img from "../basicuser.png";
+import useFetchListUser from "../CustomHooks/useFetchListUser";
+import useFetchPosts from "../CustomHooks/useFetchPosts";
+import useFetchListSchools from "../CustomHooks/useFetchListSchools";
+import useFetchListCategory from "../CustomHooks/useFetchListCategory";
 
 const Product = () => {
   const { id } = useParams();
+
+  const { loadinglistuser, listuser } = useFetchListUser();
+  const { loadinglistposts, listposts } = useFetchPosts();
+  const { loadinglistschools, listschools } = useFetchListSchools();
+  const { loadinglistcategory, listcategory } = useFetchListCategory();
+
+  const [user, setUser] = useState([]);
+  const [post, setPost] = useState([]);
+  const [category, setCategory] = useState([]);
+
+  const [theuserschool, setTheUsersSchool] = useState([]);
+
+  useEffect(() => {
+    if (loadinglistposts) return;
+    let result2 = listposts.find((lepost) => {
+      return lepost.id === id;
+    });
+    setPost(result2);
+  }, [loadinglistposts, listposts]);
+
+  useEffect(() => {
+    if ((loadinglistuser || loadinglistposts) && post) return;
+    let result = listuser.find((user) => {
+      return user.id === post.seller_id;
+    });
+    setUser(result);
+  }, [loadinglistuser, listuser, post]);
+
+  useEffect(() => {
+    if (loadinglistschools || loadinglistuser) return;
+    let result3 = listschools.find((curschool) => {
+      return user.school_id === curschool.id;
+    });
+    setTheUsersSchool(result3);
+  }, [loadinglistschools, listschools, user]);
+
+  useEffect(() => {
+    if (loadinglistcategory || loadinglistposts) return;
+    let result = listcategory.find((cat) => {
+      return cat.id === post.category_id;
+    });
+    setCategory(result);
+  }, [loadinglistcategory, listcategory, post]);
 
   const PageProduit = () => {
     return (
@@ -16,52 +64,27 @@ const Product = () => {
               <img src={img}></img>
             </div>
             <div className="informations-container">
-              <h3>TITRE</h3>
-              <h6>dans category category</h6>
-              <h5>PRIX</h5>
-              <h5>date de publication</h5>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Corporis quo rem dolore magni eum omnis quis velit et voluptates
-                nam cum ut nulla in reprehenderit est vel laboriosam aperiam
-                qui, temporibus eius natus sunt. Enim eligendi vero commodi
-                animi quisquam laudantium eum. Repudiandae, repellat nam eaque
-                quia quae sunt ex adipisci commodi tempore vel soluta?
-                Distinctio quidem voluptates ullam nisi provident velit dolore,
-                impedit nemo necessitatibus earum accusamus numquam fugit,
-                blanditiis molestiae odit, veritatis tempora magni? Autem
-                architecto facilis excepturi molestiae, tenetur nesciunt
-                possimus labore! Inventore cumque fuga reiciendis fugit
-                excepturi voluptas repudiandae laudantium in ad, iste
-                perferendis, quibusdam cum iusto dolores! Eos vitae, doloremque
-                laboriosam necessitatibus enim exercitationem nisi sunt dicta
-                aperiam possimus, dolores in nulla sint corrupti aliquam autem
-                asperiores perferendis quasi sequi natus quibusdam consequuntur
-                beatae maiores excepturi? Asperiores commodi ipsa praesentium?
-                Fuga nihil, voluptatem esse quae nesciunt officia atque qui
-                ipsam porro dolor eligendi excepturi debitis eaque! Aliquam
-                repudiandae, cum rerum quibusdam earum fuga sunt eligendi ullam
-                modi nihil atque laboriosam hic at, totam laborum cupiditate
-                saepe deserunt consequuntur nam iste fugit quis quasi.
-                Voluptatum consequuntur architecto explicabo qui nisi cumque
-                sapiente eius perferendis aspernatur accusantium, iure illo
-                iusto vitae, recusandae exercitationem itaque eligendi rem
-                mollitia.
-              </p>
+              <h3>{post.title}</h3>
+              <h6>Catégorie : {category ? category["name"] : "loading..."}</h6>
+              <h5>Prix : {post.price}€</h5>
             </div>
+            <p>{post.description}</p>
           </div>
           <div className="postedbyuser">
             <h2>Posté par :</h2>
             <div className="pppseudo">
               <img src={img}></img>
-              <h3>PSEUDO</h3>
+              <h3>{user ? user["username"] : "pseudo"}</h3>
             </div>
             <div className="infos">
-              <h4>De l'ecole : ecole</h4>
+              <h4>De l'ecole : {theuserschool ? theuserschool["name"] : ""}</h4>
               <h4>Le : </h4>
             </div>
             <div className="voirleprofil">
-              <Link to={`/user/0`} className="text-link">
+              <Link
+                to={user ? `/user/${user["username"]}` : ""}
+                className="text-link"
+              >
                 <button>Voir le profil</button>
               </Link>
             </div>

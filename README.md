@@ -106,17 +106,38 @@ Nous avons pensé aux problèmes de garder en mémoire les images de chaque anno
 
 ## Third Step : Application des fonctions sur les pages webs
 
+Le front-end de l'application a été réalisé en Javascript avec l'aide du framework React, et le style a été fait en CSS sans l'aide de framework. 
 
+### Navigation, Fonctionnalités accesibles :
 
+Parmis les fonctionnalités disponibles sur le site, vous aurez accès :
 
+- A consultation génerale des annonces postées sur le site
+- Aux informations d'un produit, en cliquant sur son image
+- Aux informations d'un utilisateur, en cliquant sur le bouton "Voir le profil" de la page produit
+- A la page pour déposer une annonce
+- A la page pour se connecter
+- A la page pour voir votre profil
+- Dans la barre principale située en haut de l'ecran, vous pourrez revenir à l'écran principal en cliquant sur le logo, consulter la page pour déposer une annonce, vous connecter, voir votre profil ou trier les annonces en fonction de leur catégorie.
 
 
 
 ## Problème Rencontré
 
-Nous n'avons pas pu finir et obtenir tous les résultats attendus dans l'élaboration de notre site.
+Nous n'avons pas pu finir et obtenir tous les résultats attendus dans l'élaboration de notre site. \
+\
+Pour le développement front-end, nous avons rencontrés des problèmes de temps. Nous avons sur-estimé la charge d'apprentissage nécessaire pour apprendre le framework React, javascript, HTML et css.
+Néanmoins, tous les élements techniques que nous voulions réaliser sont présents dans le back end (disponible à la consultation et au tests à l'adresse `http://localhost/5000/docs`)
 
 Nous avons beaucoup de mal notamment à faire le lien entre les informations en back end et les déployer sur notre front end. 
+
+Voila les fonctionnalités que nous aurions voulu corriger: 
+- Il est impossible de se connecter à votre compte, ou de créer votre propre compte
+- Il est impossible de créer une annonce, ou d'effectuer de la maintenance sur vos annonces (supprimer, modérer les commentaires)
+- Il est impossible de mettre un commentaire à un utilisateur
+- Il est impossible d'ajouter des élements à votre panier
+- Les images ne chargent pas sur les annonces
+
 
 En encodant les images pour en faire une situation réelle, nous n'avons pas réussi à retranscrire les images directement sur nos pages webs. On a à la place décoder l'intégralité de nos pages inclus dans les informations initiales et envoyés toutes les images dans différents dossiers, que nous avons ensuite copié dans un autre dossier accessible par les pages du front. \
 Le problème étant que nous n'arrivions pas à écrire les images directement dans un dossier du front, nous ne pouvons pas retranscrire les informations de manière imagées de chaque annonce qui seront crées par la suite.

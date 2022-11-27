@@ -2,9 +2,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy.dialects.postgresql import UUID
 from datetime import datetime, timedelta
 import models, schemas
-from fastapi import HTTPException, status, Depends,UploadFile,File
+from fastapi.responses import JSONResponse
 import uuid
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 import numpy as np
@@ -141,18 +140,26 @@ def create_access_token(data: dict):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
+def delete_token_session(db:Session,token:str):
+    db_token = db.query(schemas.Token).filter(schemas.Token.access_token == token)
+    print(db_token)
+    db.delete(db_token)
+    db.commit()
+    db.refresh(db_token)
+    return JSONResponse({})
+
 # POST
 
 def create_list_posts(db: Session,list_posts):
     for i in list_posts:
-        db_post = models.Post(id= str(uuid.uuid4()),**i)
+        db_post = models.Post(id= str(uuid.uuid4()),**i,created_at=datetime.now())
         db.add(db_post)
         db.commit()
         db.refresh(db_post)
         #db_user.id = str(db_user.id)
 
 def create_post(db: Session,post: schemas.Post, id:str):
-    db_post = models.Post(**post.dict())
+    db_post = models.Post(**post.dict(),created_at=datetime.now())
     db_post.seller_id = id
     db.add(db_post)
     db.commit()
@@ -192,7 +199,7 @@ def get_posts_by_category(db: Session, cat: str, skip: int = 0, limit: int = 100
 
 def create_list_comment(db: Session, list_comment):
     for i in list_comment:
-        db_comment = models.Comment(id= str(uuid.uuid4()),**i)
+        db_comment = models.Comment(id= str(uuid.uuid4()),**i,created_at=datetime.now())
         db.add(db_comment)
         db.commit()
         db.refresh(db_comment)
@@ -202,7 +209,7 @@ def create_comment(db: Session, comment: schemas.Comment, buyer_id: str, seller_
     #record = db.query(models.School).filter(models.School.id == school.id).first()
     #if record:
     #    raise HTTPException(status_code=409, detail="Already exists")
-    db_comment = models.Comment(**comment.dict())
+    db_comment = models.Comment(**comment.dict(),created_at=datetime.now())
     db_comment.buyer_id=buyer_id
     db_comment.seller_id=seller_id
     db.add(db_comment)

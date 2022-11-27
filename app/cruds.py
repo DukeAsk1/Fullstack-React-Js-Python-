@@ -45,6 +45,19 @@ def create_list_school(db: Session,list_school):
         db.refresh(school1)
         school1.id = str(school1.id)
 
+def get_school_image(db: Session,school_id:str):
+    return db.query(models.School.jpeg).filter(models.School.id == school_id).first()
+
+def add_school_image(db: Session, data, school_id:str):
+    db_post = db.query(models.School).filter(models.School.id == school_id).first()
+    print(data)
+    for key, value in data.items():
+        setattr(db_post, key, value)
+    db.add(db_post)
+    db.commit()
+    db.refresh(db_post)
+    return db_post
+
 # USER
 
 def create_user(db: Session, user: schemas.UserCreate):
@@ -75,6 +88,19 @@ def create_list_user(db: Session,list_user):
 
 def get_users_by_school(db: Session, school_id: str):
     return db.query(models.User).filter(models.User.school_id == school_id).all()
+
+def get_user_image(db: Session,user_id:str):
+    return db.query(models.User.jpeg).filter(models.User.id == user_id).first()
+
+def add_user_image(db: Session, data, user_id:str):
+    db_post = db.query(models.User).filter(models.User.id == user_id).first()
+    print(data)
+    for key, value in data.items():
+        setattr(db_post, key, value)
+    db.add(db_post)
+    db.commit()
+    db.refresh(db_post)
+    return db_post
 
 # CATEGORY
         

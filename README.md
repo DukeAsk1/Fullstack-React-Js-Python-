@@ -100,19 +100,27 @@ Les commentaires auront un message venant d'un destinataire et d'un vendeur, et 
 
 ## Second Step : Définition des valeurs des liens de pages
 
-On a défini pour chaque lien de notre `API` une fonctionnalité particulière, allant de chercher les annonces par grande catégorie, jusqu'à obtenir les étapes de paiements/transactions. \
+On a défini pour chaque lien de notre `API` une fonctionnalité particulière, allant de chercher les annonces par grande catégorie, jusqu'à obtenir les étapes de paiements/transactions.\
 Nous avons pensé aux problèmes de garder en mémoire les images de chaque annonce, pour rendre les annonces mieux visible. On a donc encodé les images en message string `base64` puis stockées dans notre base de données, on les a ensuite décodé pour les avoir continuellement sur les annonces. 
 
 
 ## Third Step : Application des fonctions sur les pages webs
 
 
-Nous devons ensuite définir le contenu que nous voulons déployer sur chaque page. 
 
 
 
 
 
+## Problème Rencontré
 
+Nous n'avons pas pu finir et obtenir tous les résultats attendus dans l'élaboration de notre site.
 
-Séance 28/10 : add link to routers from postgre (ex: create links)
+Nous avons beaucoup de mal notamment à faire le lien entre les informations en back end et les déployer sur notre front end. 
+
+En encodant les images pour en faire une situation réelle, nous n'avons pas réussi à retranscrire les images directement sur nos pages webs. On a à la place décoder l'intégralité de nos pages inclus dans les informations initiales et envoyés toutes les images dans différents dossiers, que nous avons ensuite copié dans un autre dossier accessible par les pages du front. \
+Le problème étant que nous n'arrivions pas à écrire les images directement dans un dossier du front, nous ne pouvons pas retranscrire les informations de manière imagées de chaque annonce qui seront crées par la suite.
+
+De plus, pour rester dans la mise en situation, la déconnexion sur notre site n'as pas été simple, notamment pour récupérer le jeton de connexion de l'utilisateur actuel et le supprimer partiellement. Nous avions simplement essayé de redirigé vers la page d'accueil, en ne gardant rien en mémoire. 
+
+Un axe d'amélioration aurait été également de trier les informations sur d'autre critères, comme par exemple par école, ou encore en fonction de la zone géographique. 

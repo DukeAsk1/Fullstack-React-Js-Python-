@@ -65,7 +65,7 @@ const Product = () => {
             </div>
             <div className="informations-container">
               <h3>{post.title}</h3>
-              <h6>Catégorie : {category ? category["name"] : "loading..."}</h6>
+              <h5>Catégorie : {category ? category["name"] : "loading..."}</h5>
               <h5>Prix : {post.price}€</h5>
             </div>
             <p>{post.description}</p>

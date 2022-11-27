@@ -5,25 +5,27 @@ import { Link } from "react-router-dom";
 import lebonplanimg from "../lebonplan.png";
 import data from "../api/annonces";
 
+import useFetchListCategory from "../CustomHooks/useFetchListCategory";
 const Main = () => {
-  const [user, setUser] = useState([]);
+  const { loadinglistcategory, listcategory } = useFetchListCategory();
 
+  const [user, setUser] = useState([]);
   const [categories, setCategories] = useState();
 
   const getNumberOfCategories = () => {
-    const cats = [...new Set(data.map((annonce) => annonce.categorie))];
-    return cats.map((cat, index) => {
+    return listcategory.map((cat, index) => {
       return (
-        <h4 key={index} className="category">
-          {cat}
-        </h4>
+        <h5 key={index} className="category">
+          {cat.name}
+        </h5>
       );
     });
   };
 
   useEffect(() => {
+    if (loadinglistcategory) return;
     setCategories(getNumberOfCategories());
-  }, []);
+  }, [loadinglistcategory, listcategory]);
 
   return (
     <>
@@ -33,13 +35,22 @@ const Main = () => {
             <h2>LE LOGO</h2>
           </Link>
           <button className="btn">
-            <h4>Déposer une annonce</h4>
-          </button>
-          <button className="btn">
-            <Link to={`/user/${"efayonga"}`} className="text-link">
-              <h4>Mon Profil</h4>
+            <Link to={`/createproduct`} className="text-link">
+              <h4>Déposer une annonce</h4>
             </Link>
           </button>
+          <div className="connectmyprofile">
+            <button className="btn">
+              <Link to={`/user/${"efayonga"}`} className="text-link">
+                <h4>Mon Profil</h4>
+              </Link>
+            </button>
+            <button className="btn">
+              <Link to={`/connect`} className="text-link">
+                <h4>Se Connecter</h4>
+              </Link>
+            </button>
+          </div>
         </div>
         <div className="category-nav">{categories}</div>
       </div>

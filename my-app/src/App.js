@@ -5,6 +5,7 @@ import Homepage from "./Homepage/Homepage";
 import Connect from "./Connect/Connect";
 import User from "./User/User";
 import Product from "./Product/Product";
+import CreateProduct from "./Product/CreateProduct";
 
 function App() {
   return (
@@ -17,6 +18,10 @@ function App() {
 
           <Route path="/connect">
             <Connect />
+          </Route>
+
+          <Route path="/createproduct">
+            <CreateProduct />
           </Route>
 
           <Route path="/user/:id" children={<User />} />

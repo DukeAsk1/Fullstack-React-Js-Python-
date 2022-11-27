@@ -4,18 +4,28 @@ import { Link } from "react-router-dom";
 import useFetchListUser from "../CustomHooks/useFetchListUser";
 import useFetchListCategory from "../CustomHooks/useFetchListCategory";
 import useFetchListSchools from "../CustomHooks/useFetchListSchools";
+import useFetchImageFromPostId from "../CustomHooks/useFetchImageFromPostId";
+import basicuserimg from "../basicuser.png";
 
 const Annonce = ({ annonce }) => {
-  const { title, price, created_at, img, category_id, description, seller_id } =
+  const { title, price, created_at, id, category_id, description, seller_id } =
     annonce;
 
   const { loadinglistuser, listuser } = useFetchListUser();
   const { loadinglistcategory, listcategory } = useFetchListCategory();
   const { loadinglistschools, listschools } = useFetchListSchools();
+  const { loadingimage, image } = useFetchImageFromPostId(id);
 
   const [user, setUser] = useState([]);
   const [category, setCategory] = useState([]);
   const [theschool, setTheSchool] = useState([]);
+  const [imagelink, setImageLink] = useState("");
+
+  useEffect(() => {
+    if (loadingimage) return;
+    let finalPath = image["filename"];
+    setImageLink(finalPath);
+  }, [loadingimage]);
 
   useEffect(() => {
     if (loadinglistuser) return;
@@ -74,7 +84,7 @@ const Annonce = ({ annonce }) => {
         <section className="bottom">
           <Link to={`/product/${annonce.id}`} className="text-link">
             <section className="left">
-              <img src={img} />
+              <img src={imagelink} />
             </section>
           </Link>
 

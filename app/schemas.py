@@ -84,3 +84,18 @@ class Post(BaseModel):
         orm_mode = True
 
 
+class Order(BaseModel):
+    id: Annotated[str, Field(default_factory=lambda: uuid4().hex)]
+    buyer_id : str
+    seller_id : str
+    post_id: Optional[str]
+    stage: Annotated[int, Field(default_factory=1)]
+    created_at: Annotated[datetime, Field(default_factory=lambda: datetime.now())]
+    sent_at: datetime
+    received_at: datetime
+    rated: Annotated[bool, Field(default_factory=False)]
+
+
+
+    class Config:
+        orm_mode = True

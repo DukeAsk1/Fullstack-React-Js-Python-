@@ -5,6 +5,8 @@ import models, schemas
 from fastapi.responses import JSONResponse
 import uuid
 from jose import JWTError, jwt
+from passlib.context import CryptContext
+import numpy as np
 
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ALGORITHM = "HS256"
@@ -168,7 +170,6 @@ def create_post(db: Session,post: schemas.Post, id:str):
 
 def add_image(db: Session, data, id:str):
     db_post = db.query(models.Post).filter(models.Post.id == id).first()
-    print(data)
     for key, value in data.items():
         setattr(db_post, key, value)
     db.add(db_post)
@@ -185,6 +186,8 @@ def get_post_image(db: Session, post_id: str):
 def get_posts(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Post).offset(skip).limit(limit).all()
 
+def get_posts_by_seller(db:Session, seller_id: str, skip: int = 0, limit: int = 100):
+    return db.query(models.Post).filter(models.Post.seller_id == seller_id).offset(skip).limit(limit).all()
 
 def get_posts_by_category(db: Session, cat: str, skip: int = 0, limit: int = 100):
     return db.query(models.Post).filter(models.Post.category == cat).offset(skip).limit(limit).all()
@@ -224,5 +227,56 @@ def get_comment(db: Session, user_id: int):
 def get_comments_by_seller(db: Session, seller_id: str):
     return db.query(models.Comment).filter(models.Comment.seller_id == seller_id).all()
 
+def get_rating(db:Session, seller_id: str):
+    return np.mean(db.query(models.Comment.rating).filter(models.Comment.seller_id == seller_id).all())
 
 
+
+
+# gestion user
+def get_own_posts(db:Session, seller_id: str):
+    return db.query(models.Post).filter(models.Post.seller_id == seller_id).all()
+
+def delete_post(db:Session, current_id: str, post_id: str):
+    db_post = db.query(models.Post).filter(models.Post.id == post_id).first()
+    if str(db_post.seller_id) != current_id:
+        raise HTTPException(status_code=400, detail="Not authorized")
+    db.delete(db_post)
+    db.commit()
+    return db_post
+
+
+# commande
+def create_order(db:Session, buyer_id: str, post_id: str):
+    db_order = models.Order(id= str(uuid.uuid4()), stage=1, created_at=datetime.now())
+    db_order.buyer_id=buyer_id
+    db_order.seller_id = db.query(models.Post).filter(models.Post.id == post_id).first().seller_id
+    db_order.post_id=post_id
+    db.add(db_order)
+    db.commit()
+    db.refresh(db_order)
+    db_order.id = str(db_order.id)
+    return db_order
+
+def order_next_stage(db:Session, current_id: str, order_id: str):
+    db_order = db.query(models.Order).filter(models.Order.id == order_id).first()
+    stage = db_order.stage
+    if stage==1: # ordered to sent
+        if current_id != str(db_order.seller_id): # seller only
+            raise HTTPException(status_code=400, detail="Not authorized")
+        db_order.sent_at = datetime.now()
+    elif stage==2: # sent to received
+        if current_id != str(db_order.buyer_id): # buyer only
+            raise HTTPException(status_code=400, detail="Not authorized")
+        db_order.received_at = datetime.now()
+    elif stage==3: # received to rated
+        if current_id != str(db_order.buyer_id): # buyer only
+            raise HTTPException(status_code=400, detail="Not authorized")
+        db_order.rated_at = datetime.now()
+    else: # cannot change stage
+        raise HTTPException(status_code=400, detail="Cannot change stage : "+ str(stage))
+    db_order.stage+=1
+    db.add(db_order)
+    db.commit()
+    db.refresh(db_order)
+    return db_order

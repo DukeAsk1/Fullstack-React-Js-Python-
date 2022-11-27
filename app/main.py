@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends,Header, Request, HTTPException, status, Upl
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import StreamingResponse
 from typing import Optional
@@ -21,6 +21,7 @@ from typing import Union
 import psycopg2
 from PIL import Image
 import io
+import os.path
 
 
 
@@ -224,6 +225,12 @@ async def get_current_active_user(current_user: schemas.UserBase = Depends(get_c
 async def read_users_me(current_user: schemas.UserBase = Depends(get_current_active_user)):
     return current_user
 
+@app.post('/logout')
+async def logout(session: Session = Depends(login)):
+    response = RedirectResponse(url="/")
+    session['access_token'].revoke_session()
+    return response
+
 # POST
 
 
@@ -269,7 +276,9 @@ def get_post_image(post_id: str, db: Session = Depends(get_db)):
     #print(img_enc)
     img_dec = str(base64.b64decode(img_enc))
     #print(img_dec[:100])
-    decodeit = open('posts_images/{}.jpeg'.format(post_id), 'wb')
+    #decodeit = open('../{}.jpeg'.format(post_id), 'wb')
+    print(os.path.dirname(__file__))
+    decodeit = open('../{}.jpeg'.format(post_id),'wb')
     decodeit.write(base64.b64decode((img_enc)))
     decodeit.close()
     img_dec = img_dec[2: ]
@@ -277,7 +286,6 @@ def get_post_image(post_id: str, db: Session = Depends(get_db)):
     #print(img_dec[:100])
     #json_compatible_item_data = jsonable_encoder(img_dec)
     #return JSONResponse(content=decodeit,media_type="image/jpg")
-    print(type(decodeit))
     #return Response(content=img_dec,media_type='image/jpeg')
 
     return {'filename':'{}.jpeg'.format(post_id)}

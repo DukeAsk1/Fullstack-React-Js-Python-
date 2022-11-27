@@ -33,6 +33,12 @@ img {
   object-fit: cover;
 }
 
+.lelogomain {
+  width: 110px;
+  height: 100px;
+  object-fit: cover;
+}
+
 .Main-Container {
   box-shadow: rgba(50, 50, 93, 0.25) 0px 0px 15px 0px,
     rgba(0, 0, 0, 0.1) 0px 8px 8px -8px;

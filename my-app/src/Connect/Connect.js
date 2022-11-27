@@ -57,7 +57,7 @@ const Connect = () => {
               </div>
               <div className="middle">
                 <p>
-                  lenomdusite est un site innovant mettant en valeur la
+                  UniversiT'esEtudiant est un site innovant mettant en valeur la
                   confiance et le partage entre étudiants.
                   <br />
                   <br /> Que ce soie de la même école, même campus, même ville
@@ -68,7 +68,7 @@ const Connect = () => {
                 </p>
               </div>
               <div className="bottom">
-                <p>lenomdusite.com &copy;</p>
+                <p>universitesetudiant.com &copy;</p>
               </div>
             </div>
 

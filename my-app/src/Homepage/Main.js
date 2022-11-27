@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { MainFilterContext } from "../App";
 import lebonplanimg from "../lebonplan.png";
 import data from "../api/annonces";
+import lelogo from "../Universitetudiant.png";
 
 import useFetchListCategory from "../CustomHooks/useFetchListCategory";
 import App from "../App";
@@ -36,7 +37,7 @@ const Main = () => {
       <div className="Main-Container">
         <div className="main-nav">
           <Link className="text-link" to="/">
-            <h2>LE LOGO</h2>
+            <img src={lelogo} className="lelogomain" />
           </Link>
           <button className="btn">
             <Link to={`/createproduct`} className="text-link">

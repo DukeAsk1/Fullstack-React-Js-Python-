@@ -27,7 +27,10 @@ services:
     ports:
       - "5432:5432"
 
-  front:
-    build: ./my-app
-    ports:
-      - "3000:3000"
+  # front:
+  #   build: ./my-app
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./my-app/:/my-app
+  #   command: npm start

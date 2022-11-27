@@ -1,16 +1,20 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
-
+import { MainFilterContext } from "../App";
 import lebonplanimg from "../lebonplan.png";
 import data from "../api/annonces";
 
 import useFetchListCategory from "../CustomHooks/useFetchListCategory";
+import App from "../App";
+
 const Main = () => {
   const { loadinglistcategory, listcategory } = useFetchListCategory();
-
   const [user, setUser] = useState([]);
   const [categories, setCategories] = useState();
+
+  let myAccountId = "efayonga";
 
   const getNumberOfCategories = () => {
     return listcategory.map((cat, index) => {
@@ -41,7 +45,7 @@ const Main = () => {
           </button>
           <div className="connectmyprofile">
             <button className="btn">
-              <Link to={`/user/${"efayonga"}`} className="text-link">
+              <Link to={`/user/${myAccountId}`} className="text-link">
                 <h4>Mon Profil</h4>
               </Link>
             </button>
